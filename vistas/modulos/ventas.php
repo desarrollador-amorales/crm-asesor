@@ -141,7 +141,7 @@ if($xml){
             $listaProducto = json_decode($venta["productos"], true);
 
                 foreach ($listaProducto as $key => $value1) {
-                  //$observacion=$observacion+$value1["valor_factura"];
+                  
                 }
                 $ultimaFechaSegumiento=$value1["fecha_seguimiento"];
                 $observacion=$value1["observacion"];

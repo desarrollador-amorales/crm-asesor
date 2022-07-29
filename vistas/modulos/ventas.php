@@ -87,7 +87,8 @@ if($xml){
            <th>Cotizacion</th>
            <th>Cliente</th>
            <th>Almacen</th>
-           <th>Fecha Segumiento</th>
+           <th>Asesor</th>
+           <th>Fecha Seguimiento</th>
            <th>Observacion</th>
            <th>Acciones</th>
 
@@ -167,6 +168,8 @@ if($xml){
 
                   echo '<td>'.$value["nombre_almacen"].'</td>
 
+                  <td>'.$value["nombre"].'</td>
+
                   <td>'.$ultimaFechaSegumiento.'</td>
 
                   <td>'.$observacion.'</td>
@@ -202,7 +205,7 @@ if($xml){
 
                       echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'"><i class="fa fa-pencil"></i></button>
 
-                      <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id"].'"><i class="fa fa-times"></i></button>';
+                      <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
 
                     }
 

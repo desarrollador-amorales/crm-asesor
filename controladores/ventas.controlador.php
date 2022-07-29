@@ -617,7 +617,14 @@ class ControladorVentas{
 
 	static public function ctrRangoFechasCotizacionCliente($fechaInicial, $fechaFinal, $item, $valor, $valor2){
 
-		$tabla = " cliente_proforma cp, clientes c, usuarios u ";
+		if ($valor2 == "1" or $valor2 == "2" or $valor2 == "3"){
+			
+			$tabla = " cliente_proforma cp, clientes c, usuarios u, ventas v ";	
+		}else{
+
+			$tabla = " cliente_proforma cp, clientes c, usuarios u ";
+		}
+
 
 		$respuesta = ModeloVentas::mdlRangoFechasCotizacion($tabla, $fechaInicial, $fechaFinal, $item, $valor, $valor2);
 

@@ -256,16 +256,6 @@
                   echo '<button type="button" class="btn btn-default btnAgregarProducto1" >Agregar Actividad</button>';
                 }
                 ?>
-
-                <hr>
-
-                <div class="row">
-
-                </div>
-
-                <hr>
-
-                <br>
       
               </div>
 
@@ -273,7 +263,18 @@
 
           <div class="box-footer">
 
-            <button type="submit" class="btn btn-primary pull-right">Guardar cambios</button>
+          <?php 
+            If($valor2 == "0" or $valor2 == "1"){
+
+              echo '<button type="submit" class="btn btn-primary pull-right">Guardar cambios</button>';
+
+            }
+            
+          ?>
+
+            
+                <a class="btn btn-warning pull-left" href="javascript:history.back()"> Regresar</a>
+          
 
           </div>
 

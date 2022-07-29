@@ -271,19 +271,19 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required>' +
 
-                '<option>- Motivo Cliente -</option>' +
-
-                '<option idmotivoCliente= "idmotivoCliente" value= "Por que no compro">¿Por que no compró?</option>' +
+                '<option>- ¿Por que no compró? -</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Paralizo Obra">Paralizó obra</option>' +
 
-                '<option idmotivoCliente= "idmotivoCliente" value= "Companero>Compañero</option>' +
+                '<option idmotivoCliente= "idmotivoCliente" value= "Companero">Compañero</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Duramas">Duramas</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Competencia Precio">Competencia Precio</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Competencia Stock">Competencia Stock</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "No Contesta/Apagado">No Contesta/Apagado</option>' +
 
                 '</select>' +
 
@@ -295,7 +295,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" placeholder="Ingresar fecha"  required>' +
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" placeholder="Ingresar fecha">' +
 
                 '</div>' +
 
@@ -307,7 +307,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" placeholder="Valor Factura" >' +
+                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" placeholder="Subtotal Factura" >' +
 
                 '</div>' +
 
@@ -401,19 +401,19 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required>' +
 
-                '<option>- Motivo Cliente -</option>' +
-
-                '<option idmotivoCliente= "idmotivoCliente" value= "Por que no compro">¿Por que no compró?</option>' +
+                '<option>- ¿Por que no compró? -</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Paralizo Obra">Paralizó obra</option>' +
 
-                '<option idmotivoCliente= "idmotivoCliente" value= "Companero>Compañero</option>' +
+                '<option idmotivoCliente= "idmotivoCliente" value= "Companero">Compañero</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Duramas">Duramas</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Competencia Precio">Competencia Precio</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Competencia Stock">Competencia Stock</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "No Contesta/Apagado">No Contesta/Apagado</option>' +
 
                 '</select>' +
 
@@ -425,7 +425,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" placeholder="Ingresar fecha"  required>' +
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" placeholder="Ingresar fecha">' +
 
                 '</div>' +
 
@@ -437,7 +437,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" placeholder="Valor Factura" >' +
+                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" placeholder="Subtotal Factura" >' +
 
                 '</div>' +
 
@@ -452,8 +452,6 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
                 '</div>' +
 
                 '</div>');
-
-
         }
 
 
@@ -924,6 +922,57 @@ $('#daterange-btn').daterangepicker({
 
 )
 
+/*=============================================
+RANGO DE FECHAS PARA COTIZACIONES VENDIDAS
+=============================================*/
+
+$('#daterange2-btn').daterangepicker({
+        ranges: {},
+        startDate: moment(),
+        endDate: moment()
+    },
+    function(start, end) {
+        $('#daterange2-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+        var fechaInicial = start.format('YYYY-MM-DD');
+
+        var fechaFinal = end.format('YYYY-MM-DD');
+
+        var capturarRango = $("#daterange2-btn span").html();
+
+        localStorage.setItem("capturarRango", capturarRango);
+
+        window.location = "index.php?ruta=ventas-ganadas&fechaInicial=" + fechaInicial + "&fechaFinal=" + fechaFinal;
+
+    }
+
+)
+
+/*=============================================
+RANGO DE FECHAS PARA COTIZACIONES PERDIDAS
+=============================================*/
+
+$('#daterange3-btn').daterangepicker({
+        ranges: {},
+        startDate: moment(),
+        endDate: moment()
+    },
+    function(start, end) {
+        $('#daterange3-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+        var fechaInicial = start.format('YYYY-MM-DD');
+
+        var fechaFinal = end.format('YYYY-MM-DD');
+
+        var capturarRango = $("#daterange3-btn span").html();
+
+        localStorage.setItem("capturarRango", capturarRango);
+
+        window.location = "index.php?ruta=ventas-perdidas&fechaInicial=" + fechaInicial + "&fechaFinal=" + fechaFinal;
+
+    }
+
+)
 
 /*=============================================
 CANCELAR RANGO DE FECHAS

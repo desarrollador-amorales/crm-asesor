@@ -113,6 +113,28 @@
 
 						</a>
 
+					</li>
+					
+					<li>
+
+						<a href="ventas-ganadas">
+							
+							<i class="fa fa-circle-o"></i>
+							<span>Vendidos</span>
+
+						</a>
+
+					</li>
+					
+					<li>
+
+						<a href="ventas-perdidas">
+							
+							<i class="fa fa-circle-o"></i>
+							<span>Perdidas</span>
+
+						</a>
+
 					</li>';
 
 					if($_SESSION["perfil"] == "Administrador"){

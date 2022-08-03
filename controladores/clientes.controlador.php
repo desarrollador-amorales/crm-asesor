@@ -137,7 +137,7 @@ class ControladorClientes{
 					  }).then(function(result){
 								if (result.value) {
 	
-								window.location = "ventas";
+								window.location = "ventas-cre";
 	
 								}
 							})
@@ -156,7 +156,7 @@ class ControladorClientes{
 						  }).then(function(result){
 							if (result.value) {
 
-							window.location = "ventas";
+							window.location = "ventas-cre";
 
 							}
 						})

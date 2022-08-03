@@ -215,7 +215,7 @@ if($xml){
                         }                       
                         
 
-                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'"><i class="fa fa-pencil"></i></button>';
+                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'"><i class="fa fa-pencil"></i></button>';
 
                         echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'"></i> Relacionar</button></span>';                   
   
@@ -224,7 +224,7 @@ if($xml){
 
                       if($_SESSION["perfil"] == "Administrador" ){
 
-                      echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'"><i class="fa fa-pencil"></i></button>
+                      echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'"><i class="fa fa-pencil"></i></button>
 
                       <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
 

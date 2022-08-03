@@ -131,7 +131,6 @@ class ModeloVentas{
 		$stmt->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_vendedor", $datos["id_vendedor"], PDO::PARAM_INT);
 		$stmt->bindParam(":productos", $datos["productos"], PDO::PARAM_STR);
-
 		$stmt1->bindParam(":id_actividad", $datos["id_actividad"], PDO::PARAM_INT);
 		$stmt1->execute();
 

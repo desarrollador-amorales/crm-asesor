@@ -167,7 +167,9 @@ var tipoCliente = 0;
 var estadoCliente = 0;
 var clienteCompartido = 0;
 var motivoCliente = 0;
-var quotationNumber = 0;
+var observacion = 0;
+var fechaSeguimiento = 0;
+var valorFactura = 0;
 
 $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
@@ -177,6 +179,10 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
     estadoCliente++;
     clienteCompartido++;
     motivoCliente++;
+    observacion++;
+    fechaSeguimiento++;
+    valorFactura++;
+
 
     var datos = new FormData();
     datos.append("traerProductos", "ok");
@@ -207,13 +213,15 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<select class="form-control nuevoTipoCliente" id="tipoCliente' + tipoCliente + '" idtipoCliente name="nuevoTipoCliente" required>' +
 
-                '<option>- Origen del Cliente -</option>' +
-
-                '<option idtipoCliente= "idtipoCliente" value= "Interno">Interno</option>' +
-
-                '<option idtipoCliente= "idtipoCliente" value= "Externo">Externo</option>' +
+                '<option idtipoCliente= "idtipoCliente" value= "">- Origen del Cliente -</option>' +
 
                 '<option idtipoCliente= "idtipoCliente" value= "Llamada">Llamada</option>' +
+
+                '<option idtipoCliente= "idtipoCliente" value= "Neo">Neo</option>' +
+
+                '<option idtipoCliente= "idtipoCliente" value= "Visita Almacen">Visita Almacén</option>' +
+
+                '<option idtipoCliente= "idtipoCliente" value= "Visita Obra">Visita Obra</option>' +
 
                 '</select>' +
 
@@ -225,9 +233,9 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="col-xs-2 style="padding-right:0px">' +
 
-                '<select class="form-control nuevoCliCompartido" id="cliCompartido' + clienteCompartido + '" idCliCompartido name="nuevoCliCompartido" required>' +
+                '<select class="form-control nuevoCliCompartido" id="cliCompartido' + clienteCompartido + '" idCliCompartido name="nuevoCliCompartido">' +
 
-                '<option>- Cliente Compartido -</option>' +
+                '<option idCliCompartido= "idCliCompartido" value= "">- Cliente Compartido -</option>' +
 
                 '<option idCliCompartido= "idCliCompartido" value= "Adrián Rios">Adrián Ríos</option>' +
 
@@ -252,7 +260,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<select class="form-control nuevoEstadoCliente" id="estadoCliente' + estadoCliente + '" idestadoCliente name="nuevoEstadoCliente" required>' +
 
-                '<option>- Estado Cliente -</option>' +
+                '<option idestadoCliente= "idestadoCliente" value= "">- Estado Cliente -</option>' +
 
                 '<option idestadoCliente= "idestadoCliente" value= "Seguimiento">Seguimiento</option>' +
 
@@ -269,9 +277,9 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="col-xs-2 style="padding-right:0px">' +
 
-                '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required>' +
+                '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required disabled>' +
 
-                '<option>- ¿Por que no compró? -</option>' +
+                '<option idmotivoCliente= "idmotivoCliente" value= "">- ¿Por que no compró? -</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Paralizo Obra">Paralizó obra</option>' +
 
@@ -285,6 +293,9 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "No Contesta/Apagado">No Contesta/Apagado</option>' +
 
+                '<option idmotivoCliente= "idmotivoCliente" value= "Curiosidad">Curiosidad</option>' +
+
+
                 '</select>' +
 
                 '</div>' +
@@ -295,7 +306,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" placeholder="Ingresar fecha">' +
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" required disabled>' +
 
                 '</div>' +
 
@@ -307,7 +318,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" placeholder="Subtotal Factura" >' +
+                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" id="nuevoValorFactura' + valorFactura + '" placeholder="Subtotal Factura" required disabled>' +
 
                 '</div>' +
 
@@ -317,11 +328,48 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="col-xs-12" style="padding-left:14px">' +
 
-                '<input type="text" class="form-control nuevoObservacion"  name="nuevoObservacion" placeholder="Ingresar Observacion" required>' +
+                '<input type="text" class="form-control nuevoObservacion"  name="nuevoObservacion"  id ="nuevoObservacion' + observacion + '" placeholder="Ingresar Observacion" required disabled>' +
 
                 '</div>' +
 
                 '</div>');
+
+
+
+
+            /*=============================================
+            SELECCCIONAR ESTADO CLIENTE
+            =============================================**/
+
+
+            $(".formularioVenta").on("change", "select.nuevoEstadoCliente", function() {
+                var estado = $(this).val();
+                if (estado == "Vendido") {
+                    document.getElementById("nuevoValorFactura" + valorFactura).disabled = false;
+                } else if (estado != "Vendido") {
+                    document.getElementById("nuevoValorFactura" + valorFactura).disabled = true;
+                }
+
+                if (estado == "Seguimiento" || estado == "Perdido") {
+                    document.getElementById("nuevoObservacion" + observacion).disabled = false;
+                } else if (estado != "Seguimiento" || estado != "Perdido") {
+                    document.getElementById("nuevoObservacion" + observacion).disabled = true;
+                }
+
+                if (estado == "Seguimiento") {
+                    document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = false;
+                } else if (estado != "Seguimiento") {
+                    document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = true;
+                }
+
+                if (estado == "Perdido") {
+                    document.getElementById("motivoCliente" + motivoCliente).disabled = false;
+                } else if (estado != "Perdido") {
+                    document.getElementById("motivoCliente" + motivoCliente).disabled = true;
+                }
+
+                listarProductos()
+            })
 
 
         }
@@ -343,6 +391,9 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
     estadoCliente++;
     clienteCompartido++;
     motivoCliente++;
+    observacion++;
+    fechaSeguimiento++;
+    valorFactura++;
 
     var datos = new FormData();
     datos.append("traerProductos", "ok");
@@ -381,7 +432,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<select class="form-control nuevoEstadoCliente" id="estadoCliente' + estadoCliente + '" idestadoCliente name="nuevoEstadoCliente" required>' +
 
-                '<option>- Estado Cliente -</option>' +
+                '<option idestadoCliente= "idestadoCliente" value= "">- Estado Cliente -</option>' +
 
                 '<option idestadoCliente= "idestadoCliente" value= "Seguimiento">Seguimiento</option>' +
 
@@ -399,9 +450,9 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="col-xs-2 style="padding-right:0px">' +
 
-                '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required>' +
+                '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required disabled>' +
 
-                '<option>- ¿Por que no compró? -</option>' +
+                '<option idmotivoCliente= "idmotivoCliente" value= "">- ¿Por que no compró? -</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Paralizo Obra">Paralizó obra</option>' +
 
@@ -415,6 +466,8 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "No Contesta/Apagado">No Contesta/Apagado</option>' +
 
+                '<option idmotivoCliente= "idmotivoCliente" value= "Curiosidad">Curiosidad</option>' +
+
                 '</select>' +
 
                 '</div>' +
@@ -425,7 +478,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" placeholder="Ingresar fecha">' +
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" required disabled>' +
 
                 '</div>' +
 
@@ -437,7 +490,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" placeholder="Subtotal Factura" >' +
+                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" id="nuevoValorFactura' + valorFactura + '" placeholder="Subtotal Factura" required disabled>' +
 
                 '</div>' +
 
@@ -447,11 +500,45 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="col-xs-12" style="padding-left:14px">' +
 
-                '<input type="text" class="form-control nuevoObservacion"  name="nuevoObservacion" placeholder="Ingresar Observacion" required>' +
+                '<input type="text" class="form-control nuevoObservacion" name="nuevoObservacion" id ="nuevoObservacion' + observacion + '" placeholder="Ingresar Observacion" required disabled>' +
 
                 '</div>' +
 
                 '</div>');
+
+            /*=============================================
+            SELECCCIONAR ESTADO CLIENTE
+            =============================================**/
+
+
+            $(".formularioVenta").on("change", "select.nuevoEstadoCliente", function() {
+                var estado = $(this).val();
+                if (estado == "Vendido") {
+                    document.getElementById("nuevoValorFactura" + valorFactura).disabled = false;
+                } else if (estado != "Vendido") {
+                    document.getElementById("nuevoValorFactura" + valorFactura).disabled = true;
+                }
+
+                if (estado == "Seguimiento" || estado == "Perdido") {
+                    document.getElementById("nuevoObservacion" + observacion).disabled = false;
+                } else if (estado != "Seguimiento" || estado != "Perdido") {
+                    document.getElementById("nuevoObservacion" + observacion).disabled = true;
+                }
+
+                if (estado == "Seguimiento") {
+                    document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = false;
+                } else if (estado != "Seguimiento") {
+                    document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = true;
+                }
+
+                if (estado == "Perdido") {
+                    document.getElementById("motivoCliente" + motivoCliente).disabled = false;
+                } else if (estado != "Perdido") {
+                    document.getElementById("motivoCliente" + motivoCliente).disabled = true;
+                }
+                listarProductos()
+            })
+
         }
 
 
@@ -462,13 +549,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
 
 
-/*=============================================
-SELECCCIONAR ESTADO CLIENTE
-=============================================**/
 
-$(".formularioVenta").on("change", "select.nuevoEstadoCliente", function() {
-    listarProductos()
-})
 
 /*=============================================
 SELECCIONAR CLIENTE COMPARTIDO
@@ -772,6 +853,7 @@ $(".tablas").on("click", ".btnEditarVenta", function() {
 
     var idVenta = $(this).attr("idVenta");
     var actividadRealizada = $(this).attr("actividadRealizada");
+    var numeroCotizacion = $(this).attr("numeroCotizacion");
     var idVendedor = $(this).attr("id_vendedor")
     var idSession = $(this).attr("id_session")
 
@@ -787,7 +869,7 @@ $(".tablas").on("click", ".btnEditarVenta", function() {
         })
 
     } else {
-        window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada;
+        window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada + "&numeroCotizacion=" + numeroCotizacion;
     }
 
 

@@ -191,7 +191,7 @@ if($xml){
 
                         echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'"><i class="fa fa-pencil"></i></button>';
 
-                        echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'"></i> Relacionar</button></span>';                   
+                        echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$value["id_almacen"].'"></i> Relacionar</button></span>';                   
   
                       }
 
@@ -274,6 +274,16 @@ if($xml){
                 <input type="text" class="form-control input-lg" name="cotizacionRelacion" placeholder="Cotizacion a Relacionar" required>
 
                 <input type="hidden" class="form-control input-lg" name="idCotizacion" id="idCotizacion">
+                
+                <input type="hidden" class="form-control input-lg" name="idAlmacen" id="idAlmacen">
+
+              </div>
+
+                <div class="input-group">
+                
+                <span class="input-group-addon"><i class="fa fa-ticket"></i></span> 
+
+                <textarea class="form-control input-lg" name="motivoRelacion" placeholder="Motivo Relacion" rows="5" required></textarea>
 
               </div>
 

@@ -191,10 +191,12 @@ class ModeloClientes{
 
 	static public function mdlEditarClienteProforma($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET  relacionado = 1 , cotizacion_relacion =:idCotizacion  WHERE cotizacion = :cotizacion");
+		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET  relacionado = 1 , cotizacion_relacion =:idCotizacion, motivo_relacion=:motivo_relacion, fecha_motivo_relacion=NOW() WHERE cotizacion = :cotizacion and id_almacen = :idAlmacen");
 
 		$stmt->bindParam(":cotizacion", $datos["idCotizacion"], PDO::PARAM_STR);
 		$stmt->bindParam(":idCotizacion", $datos["cotizacionRelacion"] , PDO::PARAM_STR);
+		$stmt->bindParam(":motivo_relacion", $datos["motivoRelacion"] , PDO::PARAM_STR);
+		$stmt->bindParam(":idAlmacen", $datos["idAlmacen"] , PDO::PARAM_STR);
 
 		
 

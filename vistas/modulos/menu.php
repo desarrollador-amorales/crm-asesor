@@ -98,7 +98,7 @@
 						<a href="ventas">
 							
 							<i class="fa fa-circle-o"></i>
-							<span>Administrar Actividades</span>
+							<span>Agenda</span>
 
 						</a>
 

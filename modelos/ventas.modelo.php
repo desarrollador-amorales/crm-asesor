@@ -36,6 +36,39 @@ class ModeloVentas{
 
 	}
 
+
+	/*=============================================
+	MOSTRAR VENTAS LEER DATOS
+	=============================================*/
+
+	static public function mdlMostrarVentasLeerDatos($tabla, $item, $valor, $valor1){
+
+		if($item != null){
+
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item and id_almacen = $valor1 ORDER BY id ASC");
+
+			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+			return $stmt -> fetch();
+
+		}else{
+
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY id ASC");
+
+			$stmt -> execute();
+
+			return $stmt -> fetchAll(); 
+
+		}
+		
+		//$stmt -> close();
+
+		$stmt = null;
+
+	}
+
 	/*=============================================
 	REGISTRO DE VENTA
 	=============================================*/
@@ -300,19 +333,19 @@ class ModeloVentas{
 
 				if ($valor2 == "1"){
 
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.actividad_realizada = $valor2 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' ");		
+					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' ");		
 
 				}
 				else if($valor2 == "2"){
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.actividad_realizada = 1 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos like '%$condicionProductos1%'");		
+					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos like '%$condicionProductos1%'");		
 				}
 				
 				else if($valor2 == "3"){
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.actividad_realizada = 1 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos like '%$condicionProductos2%'");		
+					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos like '%$condicionProductos2%'");		
 				}
 				
 				else {
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.actividad_realizada = $valor2 and u.id in (71, 82, 100, 121, 124) ");
+					$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and u.id in (71, 82, 100, 121, 124) ");
 				}  
 			
 			$stmt -> execute();
@@ -357,13 +390,13 @@ class ModeloVentas{
 
 			if($valor2 == "1"){	
 
-				$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.actividad_realizada = $valor2 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' and cp.fecha_cotizacion like '%$fechaFinal%'");
+				$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and cp.relacionado = 0 and u.usuario = cp.id_asesor and cp.actividad_realizada = $valor2 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' and cp.fecha_cotizacion like '%$fechaFinal%'");
 
 			}
 			
 			else if($valor2 == "2"){	
 
-				$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente and u.usuario = cp.id_asesor and cp.actividad_realizada = 1 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos  like '%$condicionProductos1%'");
+				$stmt = Conexion::conectar()->prepare("SELECT cp.*, c.id id_cliente,u.nombre, u.id id_asesor_interno FROM $tabla WHERE c.cedula = cp.ced_cliente  and cp.relacionado = 0 and u.usuario = cp.id_asesor and cp.actividad_realizada = 1 and u.id in (71, 82, 100, 121, 124) and cp.id_actividad = v.id and v.productos  like '%$condicionProductos1%'");
 
 			}
 

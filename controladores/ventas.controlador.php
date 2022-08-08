@@ -27,11 +27,11 @@ class ControladorVentas{
 	MOSTRAR CLIENTES PROFORMAS
 	=============================================*/
 
-	static public function ctrMostrarClientePorforma($item, $valor){
+	static public function ctrMostrarClientePorforma($item, $valor, $valor1){
 
 		$tabla = "cliente_proforma";
 
-		$respuesta = ModeloVentas::mdlMostrarVentas($tabla, $item, $valor);
+		$respuesta = ModeloVentas::mdlMostrarVentasLeerDatos($tabla, $item, $valor, $valor1);
  
 		return $respuesta;
 

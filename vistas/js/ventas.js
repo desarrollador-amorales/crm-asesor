@@ -295,7 +295,6 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Curiosidad">Curiosidad</option>' +
 
-
                 '</select>' +
 
                 '</div>' +
@@ -356,9 +355,10 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
                     document.getElementById("nuevoObservacion" + observacion).disabled = true;
                 }
 
-                if (estado == "Seguimiento") {
+                if (estado == "Seguimiento" || estado == "Vendido") {
                     document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = false;
-                } else if (estado != "Seguimiento") {
+
+                } else if (estado != "Seguimiento" || estado != "Vendido") {
                     document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = true;
                 }
 
@@ -384,7 +384,6 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
 
 $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
-
 
     numProducto++;
     tipoCliente++;
@@ -478,7 +477,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="input-group">' +
 
-                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" required disabled>' +
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" min="new Date().toDateInputValue();" required disabled >' +
 
                 '</div>' +
 
@@ -515,6 +514,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
                 var estado = $(this).val();
                 if (estado == "Vendido") {
                     document.getElementById("nuevoValorFactura" + valorFactura).disabled = false;
+
                 } else if (estado != "Vendido") {
                     document.getElementById("nuevoValorFactura" + valorFactura).disabled = true;
                 }
@@ -525,9 +525,10 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
                     document.getElementById("nuevoObservacion" + observacion).disabled = true;
                 }
 
-                if (estado == "Seguimiento") {
+                if (estado == "Seguimiento" || estado == "Vendido") {
                     document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = false;
-                } else if (estado != "Seguimiento") {
+
+                } else if (estado != "Seguimiento" || estado != "Vendido") {
                     document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = true;
                 }
 
@@ -579,14 +580,40 @@ $(".formularioVenta").on("change", "select.nuevoMotivoCliente", function() {
 
 
 /*=============================================
-SELECCCIONAR FECHA CLIENTE
-=============================================**/
+    SELECCCIONAR FECHA SEGUMIENTO/VENDIDO
+    =============================================**/
 
 $(".formularioVenta").on("change", "input.nuevoFechaSeguimiento", function() {
+    var estCliente = document.getElementById("estadoCliente" + estadoCliente).value;
+    var fechaseg = document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).value;
+
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day;
+
+    if (estCliente == "Seguimiento") {
+
+        if (fechaseg < today) {
+            swal({
+                title: 'La fecha no puede ser menor a la actual',
+                type: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar'
+            })
+            document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).value = today;
+        }
+    }
     listarProductos()
 })
-
-
 
 /*=============================================
 SELECCCIONAR OBSERVACION
@@ -1137,9 +1164,11 @@ BOTON LEER DATOS
 $(".tablas").on("click", ".btnLeerDatos", function() {
 
     var idCliProforma = $(this).attr("idCliProforma");
+    var idAlmacen = $(this).attr("idAlmacen");
 
     var datos = new FormData();
     datos.append("idCliProforma", idCliProforma);
+    datos.append("idAlmacen", idAlmacen);
 
 
     $.ajax({
@@ -1154,6 +1183,7 @@ $(".tablas").on("click", ".btnLeerDatos", function() {
         success: function(respuesta) {
 
             $("#idCotizacion").val(respuesta["cotizacion"]);
+            $("#idAlmacen").val(respuesta["id_almacen"]);
         }
 
     })

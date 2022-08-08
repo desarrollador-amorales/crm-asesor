@@ -120,7 +120,10 @@ class ControladorClientes{
 		if(isset($_POST["cotizacionRelacion"])){
 
 			$datos = array ("cotizacionRelacion"=>$_POST["cotizacionRelacion"],
-							"idCotizacion" => $_POST["idCotizacion"]);
+							"idCotizacion" => $_POST["idCotizacion"],
+							"motivoRelacion" => $_POST["motivoRelacion"],
+							"idAlmacen" => $_POST["idAlmacen"]
+						);
 			
 			$respuesta = ModeloClientes::mdlEditarClienteProforma($tabla, $datos);
 

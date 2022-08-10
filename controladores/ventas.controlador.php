@@ -22,6 +22,21 @@ class ControladorVentas{
 	}
 
 
+	/*=============================================
+	MOSTRAR HISTORIAL COTIZACION
+	=============================================*/
+
+	static public function ctrMostrarHistorialCotizacion($numeroCotizacion, $idAlmacen){
+
+		$tabla = "cliente_proforma cp";
+
+		$respuesta = ModeloVentas::mdlMostrarHistorialCotizacion($tabla, $numeroCotizacion, $idAlmacen);
+ 
+		return $respuesta;
+
+	}
+
+
 
     /*=============================================
 	MOSTRAR CLIENTES PROFORMAS
@@ -266,6 +281,7 @@ class ControladorVentas{
 
 			$item = "codigo";
 			$valor = $_POST["editarVenta"];
+			$actividadRealizada = $_POST["actividadRealizada"];
 			
 
 			$traerVenta = ModeloVentas::mdlMostrarVentas($tabla, $item, $valor);
@@ -276,8 +292,28 @@ class ControladorVentas{
 
 			if($_POST["listaProductos"] == ""){
 
-				$listaProductos = $traerVenta["productos"];
-				$cambioProducto = false;
+				echo'<script>
+
+				swal({
+					  type: "error",
+					  title: "La actividad no se ejecuta si no existen detalles",
+					  showConfirmButton: true,
+					  confirmButtonText: "Cerrar"
+					  }).then(function(result){
+								if (result.value) {';
+
+									if($actividadRealizada == "1" ){
+										echo 'window.location = "ventas";';
+									}else if($actividadRealizada == "0" ){
+										echo 'window.location = "ventas-cre";';
+									}
+
+							echo'}
+							})
+
+				</script>';
+
+				return;
 
 
 			}else{

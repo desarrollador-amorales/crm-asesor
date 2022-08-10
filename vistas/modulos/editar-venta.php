@@ -44,8 +44,11 @@
                     $valor = $_GET["idVenta"];
                     $valor2= $_GET["actividadRealizada"];
                     $numeroCotizacion= $_GET["numeroCotizacion"];
+                    $idAlmacen= $_GET["idAlmacen"];
 
                     $venta = ControladorVentas::ctrMostrarVentas($item, $valor);
+                    $historial = ControladorVentas::ctrMostrarHistorialCotizacion($numeroCotizacion,$idAlmacen);
+
 
                     $itemUsuario = "id";
                     $valorUsuario = $venta["id_vendedor"];
@@ -135,12 +138,72 @@
 
                   <div class="height d-flex justify-content-center align-items-left">
 
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Hitorial Cotizacion
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#historialCotizacionModal">
+                    Historial Cotizacion
                     </button>
 
                   </div>
 
+                  <?php 
+                  If ($valor2 != "0"){
+                  echo ' <hr>
+
+                  <div class="form-group row">
+                  
+                  <div class="col-xs-1" style="padding-right:0px">
+                  
+                  <strong >Origen Negociacion</strong>
+
+                  </div>
+
+                  <div class="col-xs-1" style="padding-right:0px">
+                  
+                  <strong >Visito Almacen</strong>
+
+                  </div>
+
+
+                  <div class="col-xs-1" style="padding-right:0px">
+
+                  <strong>Cliente Compartido</strong>
+
+                  </div>
+
+                  <div class="col-xs-1" style="padding-right:0px">
+
+                  <strong>Estado Cliente</strong>
+
+                  </div>
+                
+                  <div class="col-xs-1" style="padding-right:0px">
+
+                  <strong>Motivo Cliente</strong>
+
+                  </div>
+
+                  <div class="col-xs-1" style="padding-right:0px">
+
+                  <strong>Fecha Seguimiento</strong>
+
+                  </div>
+
+                  <div class="col-xs-1" style="padding-right:0px">
+
+                  <strong>Valor Factura</strong>
+
+                  </div>
+
+                  <div class="col-xs-5" style="padding-left:14px">
+
+                  <strong>Observacion</strong>
+
+                  </div>
+
+
+                </div>';
+                }
+                
+                ?>
 
                 <!--=====================================
                 ENTRADA PARA AGREGAR PRODUCTO
@@ -148,11 +211,9 @@
                 ======================================-->
                 
                 <div class="form-group row nuevoProducto"> 
-
-                
+               
 
                 <?php
-
 
                 $listaProducto = json_decode($venta["productos"], true);
 
@@ -170,77 +231,67 @@
 
                   If(isset($value["tipo_cliente"])){
             
-                echo ' <div class="col-xs-2" style="padding-right:0px">
-
-                        <div class="input-group">
+                echo ' <div class="col-xs-1" style="padding-right:0px">
                 
                         <input type="text" class="form-control nuevoTipoCliente" idProducto="'.$value["tipo_cliente"].'" name="nuevoTipoCliente" value="'.$value["tipo_cliente"].'" readonly required>
                        
-                        </div>
-
                         </div>'; 
                     }
 
+                    If(isset($value["visita_almacen"])){
+            
+                      echo ' <div class="col-xs-1" style="padding-right:0px">
+                      
+                              <input type="text" class="form-control nuevoVisitaAlmacen" idProducto="'.$value["visita_almacen"].'" name="nuevoVisitaAlmacen" value="'.$value["visita_almacen"].'" readonly required>
+                             
+                              </div>'; 
+                      }else{
+                        echo ' <div class="col-xs-1" style="padding-right:0px">
+                      
+                        <input type="text" class="form-control nuevoVisitaAlmacen" idProducto="" name="nuevoVisitaAlmacen" value="" readonly required>
+                       
+                        </div>';
+                      }
+
                     If(isset($value["cliente_compartido"])){
                          
-                echo ' <div class="col-xs-2" style="padding-right:0px">
-                         
-                         <div class="input-group"> 
+                echo ' <div class="col-xs-1" style="padding-right:0px">
 
                          <input type="text" class="form-control nuevoCliCompartido" idProducto="'.$value["cliente_compartido"].'" name="nuevoCliCompartido" value="'.$value["cliente_compartido"].'" readonly required>
                          
-                         </div>
           
                          </div>';
                     }
 
-                echo ' <div class="col-xs-2" style="padding-right:0px">
-
-                         <div class="input-group">
+                echo ' <div class="col-xs-1" style="padding-right:0px">
             
                          <input type="text" class="form-control nuevoEstadoCliente" idProducto="'.$value["estado_cliente"].'" name="nuevoEstadoCliente" value="'.$value["estado_cliente"].'" readonly required>
-                         
-                         </div>
-                         
+                                                 
                          </div>
 
-                         <div class="col-xs-2" style="padding-right:0px">
-
-                         <div class="input-group">
+                         <div class="col-xs-1" style="padding-right:0px">
             
                          <input type="text" class="form-control nuevoMotivoCliente" idProducto="'.$value["motivo_cliente"].'" name="nuevoMotivoCliente" value="'.$value["motivo_cliente"].'" readonly required>
-          
-                         </div>
 
                          </div>
 
-                         <div class="col-xs-2" style="padding-right:0px">
+                         <div class="col-xs-1" style="padding-right:0px">
 
-                         <div class="input-group">
-            
                          <input type="date" class="form-control nuevoFechaSeguimiento" idProducto="'.$value["fecha_seguimiento"].'" name="nuevoFechaSeguimiento" value="'.$value["fecha_seguimiento"].'" readonly required>
           
                          </div>
-                         
-                         </div>
 
-                         <div class="col-xs-2" style="padding-right:0px">
-
-                         <div class="input-group">
+                         <div class="col-xs-1" style="padding-right:0px">
             
                          <input type="text" class="form-control nuevoValorFactura" idProducto="'.$value["valor_factura"].'" name="nuevoValorFactura" value="'.$value["valor_factura"].'" readonly required>
-          
-                         </div>
                          
                          </div>
                    
-                         <div class="col-xs-12" style="padding-left:14px">               
+                         <div class="col-xs-5" style="padding-left:14px">               
 
                          <input type="text" class="form-control nuevoObservacion" idProducto="'.$value["observacion"].'" name="nuevoObservacion" value="'.$value["observacion"].'" readonly required>                         
 
                         </div>
-
-
 
                       </div>';
                 }
@@ -463,49 +514,38 @@ MODAL AGREGAR CLIENTE
 MODAL HISTORIAL COTIZACION
 ======================================-->
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="historialCotizacionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header float-right">
-          <h5>User details</h5>
-          <div class="text-right">
-            <i data-dismiss="modal" aria-label="Close" class="fa fa-close"></i>
-          </div>
+          <h3>Historial</h3>
         </div>
         <div class="modal-body">
             
-
-
-          <div>
+    <div>
             
             <table class="table table-bordered">
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col">Cot.Relacionada</th>
+        <th scope="col">Descripcion</th>
+        <th scope="col">Fecha</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Samso</td>
-        <td>Natto</td>
-        <td>@samso</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Tinor</td>
-        <td>Horton</td>
-        <td>@tinor_har</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Mythor</td>
-        <td>Bully</td>
-        <td>@myth_tobo</td>
-      </tr>
+    <?php
+  foreach ($historial as $keyHistorial => $value) {
+    echo       
+    '<tr>
+    <th scope="row">'.($keyHistorial+1).'</th>
+    <td>'.$value["secundaria"].'</td>
+    <td>'.$value["motivo_relacion"].'</td>
+    <td>'.$value["fecha_motivo_relacion"].'</td>
+  </tr>';
+  }
+  ?>         
+
     </tbody>
   </table>
 
@@ -514,8 +554,7 @@ MODAL HISTORIAL COTIZACION
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

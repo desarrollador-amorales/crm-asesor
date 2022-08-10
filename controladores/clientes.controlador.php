@@ -138,11 +138,15 @@ class ControladorClientes{
 					  showConfirmButton: true,
 					  confirmButtonText: "Cerrar"
 					  }).then(function(result){
-								if (result.value) {
+								if (result.value) {';
 	
-								window.location = "ventas-cre";
+									if($_POST["actividadRealizada"] == "1" ){
+										echo 'window.location = "ventas";';
+									}else if($_POST["actividadRealizada"] == "0" ){
+										echo 'window.location = "ventas-cre";';
+									}
 	
-								}
+							echo	'}
 							})
 	
 				</script>';
@@ -157,11 +161,15 @@ class ControladorClientes{
 						  showConfirmButton: true,
 						  confirmButtonText: "Cerrar"
 						  }).then(function(result){
-							if (result.value) {
+							if (result.value) {';
 
-							window.location = "ventas-cre";
+								if($_POST["actividadRealizada"] == "1" ){
+									echo 'window.location = "ventas";';
+								}else if($_POST["actividadRealizada"] == "0" ){
+									echo 'window.location = "ventas-cre";';
+								}
 
-							}
+						echo '}
 						})
 
 			  	</script>';

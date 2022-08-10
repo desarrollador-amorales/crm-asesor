@@ -170,6 +170,7 @@ var motivoCliente = 0;
 var observacion = 0;
 var fechaSeguimiento = 0;
 var valorFactura = 0;
+var visitAlmacen = 0;
 
 $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
@@ -182,6 +183,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
     observacion++;
     fechaSeguimiento++;
     valorFactura++;
+    visitAlmacen++;
 
 
     var datos = new FormData();
@@ -205,7 +207,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<!-- Tipo del cliente -->' +
 
-                '<div class="col-xs-2" style="padding-right:0px">' +
+                '<div class="col-xs-2 style="padding-right:0px">' +
 
                 '<div class="input-group">' +
 
@@ -213,7 +215,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<select class="form-control nuevoTipoCliente" id="tipoCliente' + tipoCliente + '" idtipoCliente name="nuevoTipoCliente" required>' +
 
-                '<option idtipoCliente= "idtipoCliente" value= "">- Origen del Cliente -</option>' +
+                '<option idtipoCliente= "idtipoCliente" value= "">- Origen Negociación -</option>' +
 
                 '<option idtipoCliente= "idtipoCliente" value= "Llamada">Llamada</option>' +
 
@@ -253,7 +255,6 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '</div>' +
 
-
                 '<!-- Estado Cliente -->' +
 
                 '<div class="col-xs-2 style="padding-right:0px">' +
@@ -272,6 +273,22 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '</div>' +
 
+                '<!-- Cliente Visito Almacen -->' +
+
+                '<div class="col-xs-1 style="padding-right:0px">' +
+
+                '<select class="form-control nuevoVisitaAlmacen" id="visitAlmacen' + visitAlmacen + '" idVisitaAlmacen name="nuevoVisitaAlmacen" required>' +
+
+                '<option idVisitaAlmacen= "idVisitaAlmacen" value= "">- ¿Visito Almacen? -</option>' +
+
+                '<option idVisitaAlmacen= "idVisitaAlmacen" value= "Si">Si</option>' +
+
+                '<option idVisitaAlmacen= "idVisitaAlmacen" value= "No">No</option>' +
+
+                '</select>' +
+
+                '</div>' +
+
 
                 '<!-- Motivo del Cliente -->' +
 
@@ -282,8 +299,6 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
                 '<option idmotivoCliente= "idmotivoCliente" value= "">- ¿Por que no compró? -</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Paralizo Obra">Paralizó obra</option>' +
-
-                '<option idmotivoCliente= "idmotivoCliente" value= "Companero">Compañero</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Duramas">Duramas</option>' +
 
@@ -303,27 +318,19 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<div class="col-xs-2" style="padding-left:0px">' +
 
-                '<div class="input-group">' +
-
                 '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" required disabled>' +
-
-                '</div>' +
 
                 '</div>' +
 
                 '<!-- Valor Factura -->' +
 
-                '<div class="col-xs-2" style="padding-left:0px">' +
+                '<div class="col-xs-1" style="padding-left:0px">' +
 
-                '<div class="input-group">' +
-
-                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" id="nuevoValorFactura' + valorFactura + '" placeholder="Subtotal Factura" required disabled>' +
+                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" id="nuevoValorFactura' + valorFactura + '" placeholder="Sub. Factura" required disabled>' +
 
                 '</div>' +
 
-                '</div>' +
-
-                '<br>' +
+                '<!--Observacion -->' +
 
                 '<div class="col-xs-12" style="padding-left:14px">' +
 
@@ -331,7 +338,9 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '</div>' +
 
-                '</div>');
+                '</div>'
+
+            );
 
 
 
@@ -371,6 +380,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
                 listarProductos()
             })
 
+            localStorage.removeItem("quitarProducto");
 
         }
 
@@ -393,6 +403,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
     observacion++;
     fechaSeguimiento++;
     valorFactura++;
+    visitAlmacen++;
 
     var datos = new FormData();
     datos.append("traerProductos", "ok");
@@ -445,6 +456,22 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '</div>' +
 
+                '<!-- Cliente Visito Almacen -->' +
+
+                '<div class="col-xs-2 style="padding-right:0px">' +
+
+                '<select class="form-control nuevoVisitaAlmacen" id="visitAlmacen' + visitAlmacen + '" idVisitaAlmacen name="nuevoVisitaAlmacen" required>' +
+
+                '<option idVisitaAlmacen= "idVisitaAlmacen" value= "">- ¿Visito Almacen? -</option>' +
+
+                '<option idVisitaAlmacen= "idVisitaAlmacen" value= "Si">Si</option>' +
+
+                '<option idVisitaAlmacen= "idVisitaAlmacen" value= "No">No</option>' +
+
+                '</select>' +
+
+                '</div>' +
+
                 '<!-- Motivo del Cliente -->' +
 
                 '<div class="col-xs-2 style="padding-right:0px">' +
@@ -454,8 +481,6 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
                 '<option idmotivoCliente= "idmotivoCliente" value= "">- ¿Por que no compró? -</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Paralizo Obra">Paralizó obra</option>' +
-
-                '<option idmotivoCliente= "idmotivoCliente" value= "Companero">Compañero</option>' +
 
                 '<option idmotivoCliente= "idmotivoCliente" value= "Duramas">Duramas</option>' +
 
@@ -473,31 +498,23 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<!-- Fecha Seguimiento -->' +
 
-                '<div class="col-xs-2" style="padding-left:0px">' +
-
-                '<div class="input-group">' +
+                '<div class="col-xs-1" style="padding-left:0px">' +
 
                 '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" min="new Date().toDateInputValue();" required disabled >' +
 
                 '</div>' +
 
-                '</div>' +
-
                 '<!-- Valor Factura -->' +
 
-                '<div class="col-xs-2" style="padding-left:0px">' +
+                '<div class="col-xs-1" style="padding-left:0px">' +
 
-                '<div class="input-group">' +
-
-                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" id="nuevoValorFactura' + valorFactura + '" placeholder="Subtotal Factura" required disabled>' +
+                '<input type="numeric" class="form-control nuevoValorFactura" name="nuevoValorFactura" id="nuevoValorFactura' + valorFactura + '" placeholder="Sub. Factura" required disabled>' +
 
                 '</div>' +
 
-                '</div>' +
+                '<!-- Observacion Cotizacion -->' +
 
-                '<br>' +
-
-                '<div class="col-xs-12" style="padding-left:14px">' +
+                '<div class="col-xs-4" style="padding-left:0px">' +
 
                 '<input type="text" class="form-control nuevoObservacion" name="nuevoObservacion" id ="nuevoObservacion' + observacion + '" placeholder="Ingresar Observacion" required disabled>' +
 
@@ -560,6 +577,14 @@ $(".formularioVenta").on("change", "select.nuevoCliCompartido", function() {
     listarProductos()
 })
 
+
+/*=============================================
+SELECCIONAR VISITO ALMACEN
+=============================================**/
+
+$(".formularioVenta").on("change", "select.nuevoVisitaAlmacen", function() {
+    listarProductos()
+})
 
 /*=============================================
 SELECCIONAR TIPO DE CLIENTE
@@ -821,7 +846,7 @@ function listarProductos() {
 
     var tipoCliente = $(".nuevoTipoCliente");
 
-    var numCotizacion = $(".nuevoNumCotizacion")
+    var visitaAlmacen = $(".nuevoVisitaAlmacen")
 
     var estadoCliente = $(".nuevoEstadoCliente");
 
@@ -834,13 +859,13 @@ function listarProductos() {
     var valorFactura = $(".nuevoValorFactura");
 
 
-    for (var i = 0; i < motivoCliente.length; i++) {
+    for (var i = 0; i < estadoCliente.length; i++) {
 
         listaProductos.push({
-            "numero_cotizacion": $(numCotizacion[i]).val(),
             "tipo_cliente": $(tipoCliente[i]).val(),
             "cliente_compartido": $(clienteCompartido[i]).val(),
             "estado_cliente": $(estadoCliente[i]).val(),
+            "visita_almacen": $(visitaAlmacen[i]).val(),
             "motivo_cliente": $(motivoCliente[i]).val(),
             "fecha_seguimiento": $(fechaSeguimiento[i]).val(),
             "observacion": $(Observacion[i]).val(),
@@ -883,6 +908,7 @@ $(".tablas").on("click", ".btnEditarVenta", function() {
     var numeroCotizacion = $(this).attr("numeroCotizacion");
     var idVendedor = $(this).attr("id_vendedor")
     var idSession = $(this).attr("id_session")
+    var idAlmacen = $(this).attr("idAlmacen")
 
     if (idVendedor != idSession) {
 
@@ -896,7 +922,7 @@ $(".tablas").on("click", ".btnEditarVenta", function() {
         })
 
     } else {
-        window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada + "&numeroCotizacion=" + numeroCotizacion;
+        window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada + "&numeroCotizacion=" + numeroCotizacion + "&idAlmacen=" + idAlmacen;
     }
 
 

@@ -38,10 +38,10 @@ class ModeloVentas{
 
 
 	/*=============================================
-	MOSTRAR HISTORIAL COTIZACION
+	MOSTRAR HISTORIAL COTIZACION RELACIONADA
 	=============================================*/
 
-	static public function mdlMostrarHistorialCotizacion($tabla, $numeroCotizacion, $idAlmacen){
+	static public function mdlMostrarHistorialCotizacionRelacionada($tabla, $numeroCotizacion, $idAlmacen){
 
 
 			$stmt = Conexion::conectar()->prepare("SELECT cp.cotizacion_relacion as principal,cp.cotizacion secundaria, cp.relacionado , cp.motivo_relacion, cp.fecha_motivo_relacion FROM $tabla WHERE cp.relacionado = '1' and cp.motivo_relacion is not null and cp.cotizacion_relacion = $numeroCotizacion ");
@@ -51,6 +51,22 @@ class ModeloVentas{
 			return $stmt -> fetchAll(); 
 
 	}
+
+
+	/*=============================================
+	MOSTRAR HISTORIAL COTIZACION 
+	=============================================*/
+
+	static public function mdlMostrarHistorialCotizacion($tabla, $numeroCotizacion, $idAlmacen){
+
+
+		$stmt = Conexion::conectar()->prepare("SELECT hp.* FROM $tabla WHERE  hp.cotizacion= $numeroCotizacion and hp.id_almacen= $idAlmacen order by hp.fecha asc");
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll(); 
+
+}
 
 
 	/*=============================================

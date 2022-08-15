@@ -23,12 +23,26 @@ class ControladorVentas{
 
 
 	/*=============================================
+	MOSTRAR HISTORIAL COTIZACION RELACIONADA
+	=============================================*/
+
+	static public function ctrMostrarHistorialCotizacionRelacionada($numeroCotizacion, $idAlmacen){
+
+		$tabla = "cliente_proforma cp";
+
+		$respuesta = ModeloVentas::mdlMostrarHistorialCotizacionRelacionada($tabla, $numeroCotizacion, $idAlmacen);
+ 
+		return $respuesta;
+
+	}
+
+	/*=============================================
 	MOSTRAR HISTORIAL COTIZACION
 	=============================================*/
 
 	static public function ctrMostrarHistorialCotizacion($numeroCotizacion, $idAlmacen){
 
-		$tabla = "cliente_proforma cp";
+		$tabla = "historial_proforma hp";
 
 		$respuesta = ModeloVentas::mdlMostrarHistorialCotizacion($tabla, $numeroCotizacion, $idAlmacen);
  

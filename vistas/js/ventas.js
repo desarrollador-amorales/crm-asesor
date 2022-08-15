@@ -159,7 +159,7 @@ $('#seleccionarCotizacion').on('change', function() {
 });
 
 /*=============================================
-AGREGANDO PRODUCTOS DESDE EL BOTÓN PARA DISPOSITIVOS
+AGREGANDO DETALLES A LAS ACTIVIDADES
 =============================================*/
 
 var numProducto = 0;
@@ -171,6 +171,24 @@ var observacion = 0;
 var fechaSeguimiento = 0;
 var valorFactura = 0;
 var visitAlmacen = 0;
+var fecha = 0;
+
+var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+var hours = date.getHours();
+var minutes = date.getMinutes();
+var seconds = date.getSeconds();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+if (hours < 10) hours = "0" + hours;
+if (minutes < 10) minutes = "0" + minutes;
+if (seconds < 10) seconds = "0" + seconds;
+
+var today = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
 
 $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
@@ -184,6 +202,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
     fechaSeguimiento++;
     valorFactura++;
     visitAlmacen++;
+    fecha++;
 
 
     var datos = new FormData();
@@ -338,6 +357,14 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '</div>' +
 
+                '<!-- Fecha -->' +
+
+                '<div class="col-xs-1" style="padding-left:0px">' +
+
+                '<input type="hidden" class="form-control nuevoFecha" name="nuevoFecha" id="nuevoFecha' + fecha + '" value="' + today + '" placeholder="" required disabled >' +
+
+                '</div>' +
+
                 '</div>'
 
             );
@@ -404,6 +431,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
     fechaSeguimiento++;
     valorFactura++;
     visitAlmacen++;
+    fecha++;
 
     var datos = new FormData();
     datos.append("traerProductos", "ok");
@@ -500,7 +528,7 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
 
                 '<div class="col-xs-1" style="padding-left:0px">' +
 
-                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" min="new Date().toDateInputValue();" required disabled >' +
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" required disabled >' +
 
                 '</div>' +
 
@@ -517,6 +545,14 @@ $(".formularioVenta").on("click", ".btnAgregarProducto1", function() {
                 '<div class="col-xs-4" style="padding-left:0px">' +
 
                 '<input type="text" class="form-control nuevoObservacion" name="nuevoObservacion" id ="nuevoObservacion' + observacion + '" placeholder="Ingresar Observacion" required disabled>' +
+
+                '</div>' +
+
+                '<!-- Fecha -->' +
+
+                '<div class="col-xs-1" style="padding-left:0px">' +
+
+                '<input type="hidden" class="form-control nuevoFecha" name="nuevoFecha" id="nuevoFecha' + fecha + '" value="' + today + '" placeholder="" required disabled >' +
 
                 '</div>' +
 
@@ -858,6 +894,8 @@ function listarProductos() {
 
     var valorFactura = $(".nuevoValorFactura");
 
+    var fecha = $(".nuevoFecha")
+
 
     for (var i = 0; i < estadoCliente.length; i++) {
 
@@ -869,7 +907,8 @@ function listarProductos() {
             "motivo_cliente": $(motivoCliente[i]).val(),
             "fecha_seguimiento": $(fechaSeguimiento[i]).val(),
             "observacion": $(Observacion[i]).val(),
-            "valor_factura": $(valorFactura[i]).val()
+            "valor_factura": $(valorFactura[i]).val(),
+            "fecha": $(fecha[i]).val()
         })
 
     }

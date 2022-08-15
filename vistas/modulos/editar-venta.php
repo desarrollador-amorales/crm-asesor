@@ -47,7 +47,8 @@
                     $idAlmacen= $_GET["idAlmacen"];
 
                     $venta = ControladorVentas::ctrMostrarVentas($item, $valor);
-                    $historial = ControladorVentas::ctrMostrarHistorialCotizacion($numeroCotizacion,$idAlmacen);
+                    $historialCotizacionRelacionada = ControladorVentas::ctrMostrarHistorialCotizacionRelacionada($numeroCotizacion,$idAlmacen);
+                    $historialCotizacion = ControladorVentas::ctrMostrarHistorialCotizacion($numeroCotizacion,$idAlmacen);
 
 
                     $itemUsuario = "id";
@@ -59,8 +60,6 @@
                     $valorCliente = $venta["id_cliente"];
 
                     $cliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
-
-                    //$porcentajeImpuesto = $venta["impuesto"] * 100 / $venta["neto"];
 
 
                 ?>
@@ -112,7 +111,7 @@
 
                     <?php
 
-                      $item = 'id_asesor';
+                      $item = "id_asesor";
                       $valor = $_SESSION["usuario"];
 
                       $categorias = ControladorClientes::ctrMostrarClientes($item, $valor);
@@ -138,7 +137,7 @@
 
                   <div class="height d-flex justify-content-center align-items-left">
 
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#historialCotizacionModal">
+                    <button type="button" id="historial-btn" class="btn btn-primary" data-toggle="modal" data-target="#historialCotizacionModal">
                     Historial Cotizacion
                     </button>
 
@@ -294,7 +293,23 @@
                         </div>
 
                       </div>';
+
+                      If(isset($value["fecha"])){
+            
+                        echo ' <div class="col-xs-1" style="padding-right:0px">
+                        
+                                <input type="hidden" class="form-control nuevoFecha" idProducto="'.$value["fecha"].'" name="nuevoFecha" value="'.$value["fecha"].'" readonly required>
+                               
+                                </div>'; 
+                        }else{
+                          echo ' <div class="col-xs-1" style="padding-right:0px">
+                        
+                          <input type="hidden" class="form-control nuevoFecha" idProducto="" name="nuevoFecha" value="" readonly required>
+                         
+                          </div>';
+                        }
                 }
+                
 
 
                 ?>
@@ -364,158 +379,11 @@
 </div>
 
 <!--=====================================
-MODAL AGREGAR CLIENTE
-======================================-->
-
-<div id="modalAgregarCliente" class="modal fade" role="dialog">
-  
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-
-      <form role="form" method="post">
-
-        <!--=====================================
-        CABEZA DEL MODAL
-        ======================================-->
-
-        <div class="modal-header" style="background:#3c8dbc; color:white">
-
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-          <h4 class="modal-title">Agregar cliente</h4>
-
-        </div>
-
-        <!--=====================================
-        CUERPO DEL MODAL
-        ======================================-->
-
-        <div class="modal-body">
-
-          <div class="box-body">
-
-            <!-- ENTRADA PARA EL NOMBRE -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="nuevoCliente" placeholder="Ingresar nombre" required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA EL DOCUMENTO ID -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-key"></i></span> 
-
-                <input type="number" min="0" class="form-control input-lg" name="nuevoDocumentoId" placeholder="Ingresar documento" required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA EL EMAIL -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span> 
-
-                <input type="email" class="form-control input-lg" name="nuevoEmail" placeholder="Ingresar email" required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA EL TELÉFONO -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-phone"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="nuevoTelefono" placeholder="Ingresar teléfono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA LA DIRECCIÓN -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="nuevaDireccion" placeholder="Ingresar dirección" required>
-
-              </div>
-
-            </div>
-
-             <!-- ENTRADA PARA LA FECHA DE NACIMIENTO -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="nuevaFechaNacimiento" placeholder="Ingresar fecha nacimiento" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required>
-
-              </div>
-
-            </div>
-  
-          </div>
-
-        </div>
-
-        <!--=====================================
-        PIE DEL MODAL
-        ======================================-->
-
-        <div class="modal-footer">
-
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
-
-          <button type="submit" class="btn btn-primary">Guardar cliente</button>
-
-        </div>
-
-      </form>
-
-      <?php
-
-        $crearCliente = new ControladorClientes();
-        $crearCliente -> ctrCrearCliente();
-
-      ?>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!--=====================================
 MODAL HISTORIAL COTIZACION
 ======================================-->
 
-  <div class="modal fade" id="historialCotizacionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade" id="historialCotizacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
       <div class="modal-content">
         <div class="modal-header float-right">
           <h3>Historial</h3>
@@ -523,33 +391,106 @@ MODAL HISTORIAL COTIZACION
         <div class="modal-body">
             
     <div>
+
+        <table class="table table-striped" id="table">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Origen Negociacion</th>
+                <th scope="col">Cliente Compartido</th>
+                <th scope="col">Visito Almacen?</th>
+                <th scope="col">Fecha Seguimiento</th>
+                <th scope="col">Por que no compro?</th>
+                <th scope="col">Valor Factura</th>
+                <th scope="col">Observacion</th>
+                <th scope="col">Cotizacion Relacionada</th>
+                <th scope="col">Motivo Relacion</th>
+              </tr>
+            </thead>
+            <tbody>
             
-            <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Cot.Relacionada</th>
-        <th scope="col">Descripcion</th>
-        <th scope="col">Fecha</th>
-      </tr>
-    </thead>
-    <tbody>
-    <?php
-  foreach ($historial as $keyHistorial => $value) {
-    echo       
-    '<tr>
-    <th scope="row">'.($keyHistorial+1).'</th>
-    <td>'.$value["secundaria"].'</td>
-    <td>'.$value["motivo_relacion"].'</td>
-    <td>'.$value["fecha_motivo_relacion"].'</td>
-  </tr>';
-  }
-  ?>         
+        <?php
 
-    </tbody>
-  </table>
+            $itemHis = "id";
+            $valorHis = $_GET["idVenta"];
+            $ventaHis = ControladorVentas::ctrMostrarVentas($itemHis, $valorHis);
 
-          </div>
+          //Eliminar lo datos del historial            
+              $stmt= Conexion::conectar()->prepare("DELETE FROM historial_proforma  WHERE id_almacen = $idAlmacen and cotizacion =$numeroCotizacion");
+              $stmt->execute();
+            
+              $listaProducto = json_decode($ventaHis["productos"], true);
+              $comparaClienteCompartido="- Cliente Compartido -";
+              $comparaMotivoCliente = "- ¿Por que no compró? -";
+          //Listar los de detalles de la cotizacion e insertarlos en la tabla de historial_proforma
+              foreach ($listaProducto as $key => $valuePro) {
+
+                $stmt=Conexion::conectar()->prepare("INSERT INTO historial_proforma
+                (id_almacen, cotizacion, ced_cliente, fecha, origen_negociacion, cliente_compartido, estado_cliente, visita_almacen, motivo_cliente, fecha_seguimiento, valor_factura, observacion) 
+                VALUES 
+                (:id_almacen, :cotizacion, :ced_cliente, :fecha, :origen_negociacion, :cliente_compartido, :estado_cliente, :visita_almacen, :motivo_cliente, :fecha_seguimiento, :valor_factura, :observacion)");
+
+                $stmt->bindParam(":id_almacen", $idAlmacen, PDO::PARAM_STR);
+                $stmt->bindParam(":cotizacion", $numeroCotizacion, PDO::PARAM_STR);
+                $stmt->bindParam(":ced_cliente", $cliente["cedula"], PDO::PARAM_STR);
+                $stmt->bindParam(":fecha", $valuePro["fecha"]);
+                $stmt->bindParam(":origen_negociacion", $valuePro["tipo_cliente"], PDO::PARAM_STR);
+                $valorCliCompartido = $valuePro["cliente_compartido"] == $comparaClienteCompartido ? "":$valuePro["cliente_compartido"];
+                $stmt->bindParam(":cliente_compartido",$valorCliCompartido , PDO::PARAM_STR);
+                $stmt->bindParam(":estado_cliente", $valuePro["estado_cliente"], PDO::PARAM_STR);
+                $stmt->bindParam(":visita_almacen", $valuePro["visita_almacen"], PDO::PARAM_STR);
+                $valorMotivoCliente = $valuePro["motivo_cliente"] == $comparaMotivoCliente ? "":$valuePro["motivo_cliente"];
+                $stmt->bindParam(":motivo_cliente", $valorMotivoCliente, PDO::PARAM_STR);
+                $stmt->bindParam(":fecha_seguimiento", $valuePro["fecha_seguimiento"]);
+                $stmt->bindParam(":valor_factura", $valuePro["valor_factura"]);        
+                $stmt->bindParam(":observacion", $valuePro["observacion"], PDO::PARAM_STR);
+                $stmt->execute();
+              
+              }
+
+              foreach ($historialCotizacionRelacionada as $key => $value) {
+                $stmt =Conexion::conectar()->prepare("INSERT INTO historial_proforma
+                (id_almacen, cotizacion, ced_cliente, fecha, cotizacion_relacionada, motivo_relacion)
+                VALUES
+                (:id_almacen, :cotizacion, :ced_cliente, :fecha, :cotizacion_relacionada, :motivo_relacion)");
+
+                  $stmt->bindParam(":id_almacen", $idAlmacen, PDO::PARAM_STR);
+                  $stmt->bindParam(":cotizacion", $numeroCotizacion, PDO::PARAM_STR);
+                  $stmt->bindParam(":ced_cliente", $cliente["cedula"], PDO::PARAM_STR);
+                  $stmt->bindParam(":fecha", $value["fecha_motivo_relacion"]);
+                  $stmt->bindParam(":cotizacion_relacionada", $value["secundaria"], PDO::PARAM_STR);
+                  $stmt->bindParam(":motivo_relacion", $value["motivo_relacion"], PDO::PARAM_STR);
+                  $stmt->execute();
+
+              }
+
+            foreach ($historialCotizacion as $keyHistorial => $valueHistorial) {
+              $fechaCompara="0000-00-00 00:00:00";
+              $valorFecha = $valueHistorial["fecha"] == $fechaCompara ? "":$valueHistorial["fecha"];
+              $valorFechaSeguimiento = $valueHistorial["fecha_seguimiento"] == $fechaCompara ? "":$valueHistorial["fecha_seguimiento"];
+                  echo       
+                  '<tr>
+                  <th scope="row">'.($keyHistorial+1).'</th>
+                  <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valorFecha.'</td>
+                  <td>'.$valueHistorial["origen_negociacion"].'</td>
+                  <td>'.$valueHistorial["cliente_compartido"].'</td>
+                  <td>'.$valueHistorial["visita_almacen"].'</td>
+                  <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valorFechaSeguimiento.'</td>
+                  <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valueHistorial["motivo_cliente"].'</td>
+                  <td>'.$valueHistorial["valor_factura"].'</td>
+                  <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valueHistorial["observacion"].'</td>
+                  <td>'.$valueHistorial["cotizacion_relacionada"].'</td>
+                  <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valueHistorial["motivo_relacion"].'</td>
+                </tr>';
+            }
+
+          ?>         
+
+            </tbody>
+          </table>
+
+      </div>
 
 
         </div>
@@ -560,3 +501,10 @@ MODAL HISTORIAL COTIZACION
     </div>
   </div>
 
+
+  <script type="text/javascript">
+  $(document).ready(function () {
+  	$(".modal-dialog").css("width", "85%");
+
+  });
+  </script>

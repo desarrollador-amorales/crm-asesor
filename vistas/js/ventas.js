@@ -948,6 +948,9 @@ $(".tablas").on("click", ".btnEditarVenta", function() {
     var idVendedor = $(this).attr("id_vendedor")
     var idSession = $(this).attr("id_session")
     var idAlmacen = $(this).attr("idAlmacen")
+    var numCotizaciones = $(this).attr("numCotizaciones")
+    var cotizaciones = $(this).attr("cotizaciones")
+
 
     if (idVendedor != idSession) {
 
@@ -960,6 +963,22 @@ $(".tablas").on("click", ".btnEditarVenta", function() {
             cancelButtonText: 'Cancelar'
         })
 
+    } else if (numCotizaciones >= 2) {
+        swal({
+            title: 'Este cliente tiene abierta la cotizacion: (' + cotizaciones + ')',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Continuar'
+        }).then(function(result) {
+            if (result.value) {
+
+                window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada + "&numeroCotizacion=" + numeroCotizacion + "&idAlmacen=" + idAlmacen;
+            }
+
+        })
     } else {
         window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada + "&numeroCotizacion=" + numeroCotizacion + "&idAlmacen=" + idAlmacen;
     }

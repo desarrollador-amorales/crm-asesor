@@ -495,6 +495,11 @@ MODAL HISTORIAL COTIZACION
 
         </div>
         <div class="modal-footer">
+         <?php
+           echo '<a href="vistas/modulos/descargar-reporte.php?reporte=historial_'.$numeroCotizacion.'_'.$idAlmacen.'&numCotizacion='.$numeroCotizacion.'&idAlmacen='.$idAlmacen.'">';
+           ?>
+          <button class="btn btn-success" style="margin-top:5px">Descargar Historial en Excel</button>
+          </a>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
       </div>

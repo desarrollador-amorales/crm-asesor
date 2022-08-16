@@ -220,8 +220,9 @@ if($xml){
                           $id_actividad= $value["id_actividad"];
                         }                       
                         
+                        $numCotizaciones = ControladorVentas::ctrCotizacionesCliente($_SESSION["usuario"],$respuestaCliente["cedula"] );
 
-                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>';
+                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"numCotizaciones="'.$numCotizaciones["num"].'" cotizaciones="'.$numCotizaciones["cotizaciones"].'"><i class="fa fa-pencil"></i></button>';
 
                         echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$value["id_almacen"].'"></i> Relacionar</button></span>';                   
   

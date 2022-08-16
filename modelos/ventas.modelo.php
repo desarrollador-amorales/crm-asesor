@@ -607,5 +607,24 @@ class ModeloVentas{
 
 	}
 
+
+	/*=============================================
+	NUMERO DE COTIZACIONES POR CLIENTE
+	=============================================*/
+
+	static public function mdlCotizacionesCliente($tabla, $id_asesor, $ced_cliente ){	
+
+		$stmt = Conexion::conectar()->prepare("SELECT COUNT(*) as num, ced_cliente, group_concat(' ',cotizacion) as cotizaciones from $tabla where cp.id_asesor = '$id_asesor' and cp.ced_cliente = '$ced_cliente' and cp.relacionado = 0  group by ced_cliente having COUNT(ced_cliente) >=2 ");
+
+		$stmt -> execute();
+
+		return $stmt -> fetch();
+
+		//$stmt -> close();
+
+		$stmt = null;
+
+	}
+
 	
 }

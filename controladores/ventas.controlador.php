@@ -684,6 +684,21 @@ class ControladorVentas{
 
 
 	/*=============================================
+	UNA O MAS COTIZACIONES CLIENTES
+	=============================================*/	
+
+	static public function ctrCotizacionesCliente($id_asesor, $ced_cliente){
+
+		$tabla = "cliente_proforma cp";
+
+		$respuesta = ModeloVentas::mdlCotizacionesCliente($tabla, $id_asesor, $ced_cliente);
+
+		return $respuesta;
+		
+	}
+
+
+	/*=============================================
 	DESCARGAR EXCEL
 	=============================================*/
 
@@ -784,6 +799,80 @@ class ControladorVentas{
 		}
 
 	}
+
+
+	/*=============================================
+	DESCARGAR EXCEL HISTORIAL
+	=============================================*/
+
+	public function ctrDescargarHistorial(){
+
+		if(isset($_GET["reporte"])){
+
+
+			if(isset($_GET["numCotizacion"]) && isset($_GET["idAlmacen"])){
+
+				$historialCotizacion = ControladorVentas::ctrMostrarHistorialCotizacion($_GET["numCotizacion"],$_GET["idAlmacen"]);
+
+
+			/*=============================================
+			CREAMOS EL ARCHIVO DE EXCEL
+			=============================================*/
+
+			$Name = $_GET["reporte"].'.xls';
+
+			header('Expires: 0');
+			header('Cache-control: private');
+			header("Content-type: application/vnd.ms-excel"); // Archivo de Excel
+			header("Cache-Control: cache, must-revalidate"); 
+			header('Content-Description: File Transfer');
+			header('Last-Modified: '.date('D, d M Y H:i:s'));
+			header("Pragma: public"); 
+			header('Content-Disposition:; filename="'.$Name.'"');
+			header("Content-Transfer-Encoding: binary");
+		
+			echo utf8_decode("<table border='0'> 
+
+					<tr> 
+					<td style='font-weight:bold; border:1px solid #eee;'>FECHA</td> 
+					<td style='font-weight:bold; border:1px solid #eee;'>ORIGEN NEGOCIACION</td> 
+					<td style='font-weight:bold; border:1px solid #eee;'>CLIENTE COMPARTIDO</td>
+					<td style='font-weight:bold; border:1px solid #eee;'>VISITO ALMACEN ?</td>
+					<td style='font-weight:bold; border:1px solid #eee;'>FECHA SEGUIMIENTO</td>
+					<td style='font-weight:bold; border:1px solid #eee;'>POR QUÉ NO COMPRO?</td>
+					<td style='font-weight:bold; border:1px solid #eee;'>VALOR FACTURA</td>
+					<td style='font-weight:bold; border:1px solid #eee;'>OBSERVACION</td>		
+					<td style='font-weight:bold; border:1px solid #eee;'>COTIZACION RELACIONADA</td>		
+					<td style='font-weight:bold; border:1px solid #eee;'>MOTIVO RELACION</td
+					</tr>");
+
+			foreach ($historialCotizacion as $row => $valueHistorial){
+				$fechaCompara="0000-00-00 00:00:00";
+              	$valorFecha = $valueHistorial["fecha"] == $fechaCompara ? "":$valueHistorial["fecha"];
+              	$valorFechaSeguimiento = $valueHistorial["fecha_seguimiento"] == $fechaCompara ? "":$valueHistorial["fecha_seguimiento"];
+
+			 echo utf8_decode("<tr>
+			 			<td style='border:1px solid #eee;'>".$valorFecha."</td> 
+			 			<td style='border:1px solid #eee;'>".$valueHistorial["origen_negociacion"]."</td>
+			 			<td style='border:1px solid #eee;'>".$valueHistorial["cliente_compartido"]."</td>
+						<td style='border:1px solid #eee;'>".$valueHistorial["visita_almacen"]."</td>
+						<td style='border:1px solid #eee;'>".$valorFechaSeguimiento."</td>
+						<td style='border:1px solid #eee;'>".$valueHistorial["motivo_cliente"]."</td>
+						<td style='border:1px solid #eee;'>$ ".number_format($valueHistorial["valor_factura"],2)."</td>
+						<td style='border:1px solid #eee;'>".$valueHistorial["observacion"]."</td>
+						<td style='border:1px solid #eee;'>".$valueHistorial["cotizacion_relacionada"]."</td>
+						<td style='border:1px solid #eee;'>".$valueHistorial["motivo_relacion"]."</td>
+						</tr>");
+			}
+
+
+			echo "</table>";
+
+		 }
+		}
+
+	}
+
 
 
 	/*=============================================

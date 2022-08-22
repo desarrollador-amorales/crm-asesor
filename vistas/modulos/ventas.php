@@ -92,7 +92,11 @@ if($xml){
               echo '<th>Asesor</th>';
             }
            ?>
-           <th>Celular</th>
+            <?php
+            if($_SESSION["perfil"] == "Vendedor"){
+              echo '<th>Celular</th>';
+            }
+           ?>
            <th>Fecha Seguimiento</th>
            <th>Observacion</th>
            <th>Acciones</th>
@@ -174,7 +178,11 @@ if($xml){
 
                   }
 
-                  echo '<td>'.$value["telefono"].'</td>';
+                  if($_SESSION["perfil"] == "Vendedor"){
+
+                    echo '<td>'.$value["telefono"].'</td>';
+ 
+                   }
 
                   echo '<td>'.$ultimaFechaSegumiento.'</td>
 

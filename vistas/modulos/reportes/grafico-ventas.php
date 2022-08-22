@@ -11,10 +11,11 @@ if(isset($_GET["fechaInicial"])){
 
 $fechaInicial = null;
 $fechaFinal = null;
+$item=null;
 
 }
 
-$respuesta = ControladorVentas::ctrRangoFechasVentas($fechaInicial, $fechaFinal);
+$respuesta = ControladorVentas::ctrRangoFechasVentas($fechaInicial, $fechaFinal,$item, $valor);
 
 $arrayFechas = array();
 $arrayVentas = array();
@@ -23,7 +24,7 @@ $sumaPagosMes = array();
 foreach ($respuesta as $key => $value) {
 
 	#Capturamos sólo el año y el mes
-	$fecha = substr($value["fecha"],0,7);
+	$fecha = substr($value["fecha"],0,10);
 
 	#Introducir las fechas en arrayFechas
 	array_push($arrayFechas, $fecha);
@@ -67,6 +68,8 @@ GRÁFICO DE VENTAS
   </div>
 
 </div>
+
+
 
 <script>
 	

@@ -1,4 +1,5 @@
 <?php
+$condition="vendidos";
 
 if($_SESSION["perfil"] == "Especial"){
 
@@ -205,4 +206,3 @@ if($xml){
 
 
 </div>
-

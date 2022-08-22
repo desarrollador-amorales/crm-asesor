@@ -26,7 +26,7 @@ $('#daterange1-btn').daterangepicker({
             'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
         startDate: moment(),
-        endDate: moment()
+        endDate: moment(),
     },
     function(start, end) {
         $('#daterange1-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -43,18 +43,27 @@ $('#daterange1-btn').daterangepicker({
 
     }
 
+
 )
 
 /*=============================================
 CANCELAR RANGO DE FECHAS
-=============================================*/
+=============================================**/
 
-$(".daterangepicker.opensright .range_inputs .cancelBtn ").on("click", function() {
+$(".daterangepicker.opensright .range_inputs .cancelBtn").on("click", function() {
 
     localStorage.removeItem("capturarRango3");
     localStorage.clear();
+    if (condition == "ventas_cre") {
+        window.location = "ventas-cre";
+    }
+    if (condition == "vendidos") {
+        window.location = "ventas-ganadas";
+    }
+    if (condition == "perdidas") {
+        window.location = "ventas-perdidas";
+    }
 
-    window.location = "ventas-cre";
 })
 
 /*=============================================
@@ -82,7 +91,9 @@ $(".daterangepicker.opensright .ranges li").on("click", function() {
 
         localStorage.setItem("capturarRango3", "Hoy");
 
-        window.location = "index.php?ruta=ventas-cre&fechaInicial=" + fechaInicial + "&fechaFinal=" + fechaFinal;
+        if (condition == "ventas_cre") {
+            window.location = "index.php?ruta=ventas-cre&fechaInicial=" + fechaInicial + "&fechaFinal=" + fechaFinal;
+        }
 
     }
 

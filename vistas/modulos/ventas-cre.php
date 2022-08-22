@@ -1,4 +1,5 @@
 <?php
+$condition = "ventas_cre";
 
 if($_SESSION["perfil"] == "Especial"){
 
@@ -354,5 +355,3 @@ if($xml){
   </div>
 
 </div>
-
-

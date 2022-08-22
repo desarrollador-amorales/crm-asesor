@@ -70,6 +70,22 @@ class ModeloVentas{
 
 
 	/*=============================================
+	MOSTRAR DETALLE COTIZACION 
+	=============================================*/
+
+	static public function mdlMostrarDetalleCotizacion($tabla, $numeroCotizacion, $idAlmacen){
+
+
+		$stmt = Conexion::conectar()->prepare("SELECT dp.* FROM $tabla WHERE  dp.cotizacion= $numeroCotizacion and dp.id_almacen= $idAlmacen order by dp.fecha asc");
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll(); 
+
+}
+
+
+	/*=============================================
 	MOSTRAR VENTAS LEER DATOS
 	=============================================*/
 
@@ -612,9 +628,12 @@ class ModeloVentas{
 	NUMERO DE COTIZACIONES POR CLIENTE
 	=============================================*/
 
-	static public function mdlCotizacionesCliente($tabla, $id_asesor, $ced_cliente ){	
+	static public function mdlCotizacionesCliente($tabla, $id_asesor, $ced_cliente ){
+		
+		$vendido= '"estado_cliente":"Vendido"';
+		$perdido= '"estado_cliente":"Perdido"';
 
-		$stmt = Conexion::conectar()->prepare("SELECT COUNT(*) as num, ced_cliente, group_concat(' ',cotizacion) as cotizaciones from $tabla where cp.id_asesor = '$id_asesor' and cp.ced_cliente = '$ced_cliente' and cp.relacionado = 0  group by ced_cliente having COUNT(ced_cliente) >=2 ");
+		$stmt = Conexion::conectar()->prepare("SELECT COUNT(*) as num, ced_cliente, group_concat(' ',cotizacion) as cotizaciones from $tabla where cp.id_asesor = '$id_asesor' and cp.ced_cliente = '$ced_cliente' and cp.relacionado = 0 and v.id = cp.id_actividad and v.productos not like '%$vendido%' and v.productos not like '%$perdido%' group by ced_cliente having COUNT(ced_cliente) >=2 ");
 
 		$stmt -> execute();
 

@@ -50,6 +50,20 @@ class ControladorVentas{
 
 	}
 
+	/*=============================================
+	MOSTRAR DETALLE COTIZACION
+	=============================================*/
+
+	static public function ctrMostrarDetalleCotizacion($numeroCotizacion, $idAlmacen){
+
+		$tabla = "detalle_proforma dp";
+
+		$respuesta = ModeloVentas::mdlMostrarDetalleCotizacion($tabla, $numeroCotizacion, $idAlmacen);
+ 
+		return $respuesta;
+
+	}
+
 
 
     /*=============================================
@@ -689,7 +703,7 @@ class ControladorVentas{
 
 	static public function ctrCotizacionesCliente($id_asesor, $ced_cliente){
 
-		$tabla = "cliente_proforma cp";
+		$tabla = "cliente_proforma cp, ventas v";
 
 		$respuesta = ModeloVentas::mdlCotizacionesCliente($tabla, $id_asesor, $ced_cliente);
 
@@ -838,6 +852,7 @@ class ControladorVentas{
 					<td style='font-weight:bold; border:1px solid #eee;'>ORIGEN NEGOCIACION</td> 
 					<td style='font-weight:bold; border:1px solid #eee;'>CLIENTE COMPARTIDO</td>
 					<td style='font-weight:bold; border:1px solid #eee;'>VISITO ALMACEN ?</td>
+					<td style='font-weight:bold; border:1px solid #eee;'>ESTADO</td>
 					<td style='font-weight:bold; border:1px solid #eee;'>FECHA SEGUIMIENTO</td>
 					<td style='font-weight:bold; border:1px solid #eee;'>POR QUÉ NO COMPRO?</td>
 					<td style='font-weight:bold; border:1px solid #eee;'>VALOR FACTURA</td>
@@ -856,6 +871,7 @@ class ControladorVentas{
 			 			<td style='border:1px solid #eee;'>".$valueHistorial["origen_negociacion"]."</td>
 			 			<td style='border:1px solid #eee;'>".$valueHistorial["cliente_compartido"]."</td>
 						<td style='border:1px solid #eee;'>".$valueHistorial["visita_almacen"]."</td>
+						<td style='border:1px solid #eee;'>".$valueHistorial["estado_cliente"]."</td>
 						<td style='border:1px solid #eee;'>".$valorFechaSeguimiento."</td>
 						<td style='border:1px solid #eee;'>".$valueHistorial["motivo_cliente"]."</td>
 						<td style='border:1px solid #eee;'>$ ".number_format($valueHistorial["valor_factura"],2)."</td>

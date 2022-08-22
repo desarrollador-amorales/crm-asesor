@@ -1,4 +1,5 @@
 <?php
+$condition = "reportes";
 
 if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
@@ -41,7 +42,8 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
         <div class="input-group">
 
-          <button type="button" class="btn btn-default" id="daterange-btn2">
+
+          <button type="button" class="btn btn-default" id="daterange-btn2" >
            
             <span>
               <i class="fa fa-calendar"></i> 

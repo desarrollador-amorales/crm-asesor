@@ -18,6 +18,7 @@
 
   </section>
 
+
   <section class="content">
 
     <div class="row">
@@ -49,6 +50,7 @@
                     $venta = ControladorVentas::ctrMostrarVentas($item, $valor);
                     $historialCotizacionRelacionada = ControladorVentas::ctrMostrarHistorialCotizacionRelacionada($numeroCotizacion,$idAlmacen);
                     $historialCotizacion = ControladorVentas::ctrMostrarHistorialCotizacion($numeroCotizacion,$idAlmacen);
+                    $detalleCotizacion = ControladorVentas::ctrMostrarDetalleCotizacion($numeroCotizacion,$idAlmacen);
 
 
                     $itemUsuario = "id";
@@ -133,106 +135,98 @@
 
                 </div>
 
-              
+                <div class="box">
+                 <div class="input-group">
+                   <strong><h4>Detalles Proforma</h4></strong>
+                 </div>
+                </div>
+  
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-sm table-light ">
+                      <thead>
+                        <tr>
+                          <th scope="col">Item</th>
+                          <th scope="col">Descripcion</th>
+                          <th scope="col">Cantidad</th>
+                          <th scope="col">Precio</th>
+                          <th scope="col">Descuento</th>
+                          <th scope="col">Total</th>
+                          <th scope="col">Observacion</th>                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+                        $TotalProforma= 0;
+                        foreach ($detalleCotizacion as $keyDetalle => $valueDetalle) {
+                          $TotalProforma= $valueDetalle["total"]+$TotalProforma;
+                            echo '<tr>
+                              <th scope="row">'.$valueDetalle["codReal"].'</th>
+                              <td>'.$valueDetalle["descripcionItem"].'</td>
+                              <td>'.$valueDetalle["cantidad"].'</td>
+                              <td>'.$valueDetalle["precio"].'</td>
+                              <td>'.$valueDetalle["descuento"].'</td>
+                              <td>'.$valueDetalle["total"].'</td>
+                              <td>'.$valueDetalle["observacion"].'</td>
+                            </tr>';
+                        
+                        }
+                        echo '<tr>
+                              <th scope="row"></th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <th scope="row">Total</td>
+                              <td>'.$TotalProforma.'</td>
+                              <td></td>
+                            </tr>';
+                        
+                        ?>
+                      </tbody>
 
-                  <div class="height d-flex justify-content-center align-items-left">
+                    </table>
+              </div>
+              
+              <div class="box"> </div>
+
+              <div class="height d-flex justify-content-center align-items-left">
 
                     <button type="button" id="historial-btn" class="btn btn-primary" data-toggle="modal" data-target="#historialCotizacionModal">
-                    Historial Cotizacion
+                    <strong>Historial Cotizacion</strong>
                     </button>
 
-                  </div>
+                    <?php 
+                      If ($valor2 == "0"){
+                      echo '<button type="button" class="btn btn-success btnAgregarProducto"><strong>Agregar Actividad</strong></button>';
+                    }
 
-                  <?php 
-                  If ($valor2 != "0"){
-                  echo ' <hr>
+                      If ($valor2 == "1"){
+                      echo '<button type="button" class="btn btn-success btnAgregarProducto1"><strong>Agregar Actividad</strong></button>';
+                    }
+                    ?>
 
-                  <div class="form-group row">
-                  
-                  <div class="col-xs-1" style="padding-right:0px">
-                  
-                  <strong >Origen Negociacion</strong>
+                    <a href="javascript:history.back()" class="btn btn-warning"><strong>Regresar</strong></a>
 
-                  </div>
-
-                  <div class="col-xs-1" style="padding-right:0px">
-                  
-                  <strong >Visito Almacen</strong>
-
-                  </div>
-
-
-                  <div class="col-xs-1" style="padding-right:0px">
-
-                  <strong>Cliente Compartido</strong>
-
-                  </div>
-
-                  <div class="col-xs-1" style="padding-right:0px">
-
-                  <strong>Estado Cliente</strong>
-
-                  </div>
-                
-                  <div class="col-xs-1" style="padding-right:0px">
-
-                  <strong>Motivo Cliente</strong>
-
-                  </div>
-
-                  <div class="col-xs-1" style="padding-right:0px">
-
-                  <strong>Fecha Seguimiento</strong>
-
-                  </div>
-
-                  <div class="col-xs-1" style="padding-right:0px">
-
-                  <strong>Valor Factura</strong>
-
-                  </div>
-
-                  <div class="col-xs-5" style="padding-left:14px">
-
-                  <strong>Observacion</strong>
-
-                  </div>
-
-
-                </div>';
-                }
-                
-                ?>
+              </div>
 
                 <!--=====================================
-                ENTRADA PARA AGREGAR PRODUCTO
-                 
+                ENTRADA PARA AGREGAR DETALLE DE ACTIVIDAD
                 ======================================-->
                 
-                <div class="form-group row nuevoProducto"> 
-               
-
-                <?php
-
+            <div class="form-group row nuevoProducto"> 
+                
+             <?php
+ 
                 $listaProducto = json_decode($venta["productos"], true);
 
-                foreach ($listaProducto as $key => $value) {
-
-                  $item = "id";
-                  //$valor = $value["id"];
-                  $orden = "id";
-
-                  $respuesta = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
-
-                  //$stockAntiguo = $respuesta["stock"] + $value["cantidad"];
+               foreach ($listaProducto as $key => $value) {
                   
-                  echo '<div class="row" style="padding:5px 15px">';
+                 // echo '<div class="row" style="padding:5px 15px">';
 
                   If(isset($value["tipo_cliente"])){
             
                 echo ' <div class="col-xs-1" style="padding-right:0px">
                 
-                        <input type="text" class="form-control nuevoTipoCliente" idProducto="'.$value["tipo_cliente"].'" name="nuevoTipoCliente" value="'.$value["tipo_cliente"].'" readonly required>
+                        <input type="hidden" class="form-control nuevoTipoCliente" idProducto="'.$value["tipo_cliente"].'" name="nuevoTipoCliente" value="'.$value["tipo_cliente"].'" readonly required>
                        
                         </div>'; 
                     }
@@ -241,13 +235,13 @@
             
                       echo ' <div class="col-xs-1" style="padding-right:0px">
                       
-                              <input type="text" class="form-control nuevoVisitaAlmacen" idProducto="'.$value["visita_almacen"].'" name="nuevoVisitaAlmacen" value="'.$value["visita_almacen"].'" readonly required>
+                              <input type="hidden" class="form-control nuevoVisitaAlmacen" idProducto="'.$value["visita_almacen"].'" name="nuevoVisitaAlmacen" value="'.$value["visita_almacen"].'" readonly required>
                              
                               </div>'; 
                       }else{
                         echo ' <div class="col-xs-1" style="padding-right:0px">
                       
-                        <input type="text" class="form-control nuevoVisitaAlmacen" idProducto="" name="nuevoVisitaAlmacen" value="" readonly required>
+                        <input type="hidden" class="form-control nuevoVisitaAlmacen" idProducto="" name="nuevoVisitaAlmacen" value="" readonly required>
                        
                         </div>';
                       }
@@ -256,7 +250,7 @@
                          
                 echo ' <div class="col-xs-1" style="padding-right:0px">
 
-                         <input type="text" class="form-control nuevoCliCompartido" idProducto="'.$value["cliente_compartido"].'" name="nuevoCliCompartido" value="'.$value["cliente_compartido"].'" readonly required>
+                         <input type="hidden" class="form-control nuevoCliCompartido" idProducto="'.$value["cliente_compartido"].'" name="nuevoCliCompartido" value="'.$value["cliente_compartido"].'" readonly required>
                          
           
                          </div>';
@@ -264,77 +258,51 @@
 
                 echo ' <div class="col-xs-1" style="padding-right:0px">
             
-                         <input type="text" class="form-control nuevoEstadoCliente" idProducto="'.$value["estado_cliente"].'" name="nuevoEstadoCliente" value="'.$value["estado_cliente"].'" readonly required>
+                         <input type="hidden" class="form-control nuevoEstadoCliente" idProducto="'.$value["estado_cliente"].'" name="nuevoEstadoCliente" value="'.$value["estado_cliente"].'" readonly required>
                                                  
                          </div>
 
                          <div class="col-xs-1" style="padding-right:0px">
             
-                         <input type="text" class="form-control nuevoMotivoCliente" idProducto="'.$value["motivo_cliente"].'" name="nuevoMotivoCliente" value="'.$value["motivo_cliente"].'" readonly required>
+                         <input type="hidden" class="form-control nuevoMotivoCliente" idProducto="'.$value["motivo_cliente"].'" name="nuevoMotivoCliente" value="'.$value["motivo_cliente"].'" readonly required>
 
                          </div>
 
                          <div class="col-xs-1" style="padding-right:0px">
 
-                         <input type="date" class="form-control nuevoFechaSeguimiento" idProducto="'.$value["fecha_seguimiento"].'" name="nuevoFechaSeguimiento" value="'.$value["fecha_seguimiento"].'" readonly required>
+                         <input type="hidden" class="form-control nuevoFechaSeguimiento" idProducto="'.$value["fecha_seguimiento"].'" name="nuevoFechaSeguimiento" value="'.$value["fecha_seguimiento"].'" readonly required>
           
                          </div>
 
                          <div class="col-xs-1" style="padding-right:0px">
             
-                         <input type="text" class="form-control nuevoValorFactura" idProducto="'.$value["valor_factura"].'" name="nuevoValorFactura" value="'.$value["valor_factura"].'" readonly required>
+                         <input type="hidden" class="form-control nuevoValorFactura" idProducto="'.$value["valor_factura"].'" name="nuevoValorFactura" value="'.$value["valor_factura"].'" readonly required>
                          
                          </div>
                    
                          <div class="col-xs-5" style="padding-left:14px">               
 
-                         <input type="text" class="form-control nuevoObservacion" idProducto="'.$value["observacion"].'" name="nuevoObservacion" value="'.$value["observacion"].'" readonly required>                         
+                         <input type="hidden" class="form-control nuevoObservacion" idProducto="'.$value["observacion"].'" name="nuevoObservacion" value="'.$value["observacion"].'" readonly required>                         
 
-                        </div>
+                        </div>';
 
-                      </div>';
-
+                        //</div>
+                        
                       If(isset($value["fecha"])){
-            
-                        echo ' <div class="col-xs-1" style="padding-right:0px">
+                      
+                        echo '<input type="hidden" class="form-control nuevoFecha" idProducto="'.$value["fecha"].'" name="nuevoFecha" value="'.$value["fecha"].'" readonly required>'; 
                         
-                                <input type="hidden" class="form-control nuevoFecha" idProducto="'.$value["fecha"].'" name="nuevoFecha" value="'.$value["fecha"].'" readonly required>
-                               
-                                </div>'; 
-                        }else{
-                          echo ' <div class="col-xs-1" style="padding-right:0px">
-                        
-                          <input type="hidden" class="form-control nuevoFecha" idProducto="" name="nuevoFecha" value="" readonly required>
-                         
-                          </div>';
-                        }
-                }
-                
-
+                      }else{
+                          
+                        echo '<input type="hidden" class="form-control nuevoFecha" idProducto="" name="nuevoFecha" value="" readonly required>';
+                      }
+                }               
 
                 ?>
               
+              <input type="hidden" id="listaProductos" name="listaProductos">
 
-                </div>
-
-                <input type="hidden" id="listaProductos" name="listaProductos">
-
-                <!--=====================================
-                BOTÓN PARA AGREGAR PRODUCTO
-                BOTON CON hidden-lg no se mostrará para la edicion del detalle
-                ======================================-->
-
-                <!--<button type="button" class="btn btn-default hidden-lg btnAgregarProducto">Agregar producto</button>-->
-
-                <?php 
-                  If ($valor2 == "0"){
-                  echo '<button type="button" class="btn btn-default btnAgregarProducto" >Agregar Actividad</button>';
-                }
-
-                  If ($valor2 == "1"){
-                  echo '<button type="button" class="btn btn-default btnAgregarProducto1" >Agregar Actividad</button>';
-                }
-                ?>
+                </div> 
       
               </div>
 
@@ -350,10 +318,6 @@
             }
             
           ?>
-
-            
-                <a class="btn btn-warning pull-left" href="javascript:history.back()"> Regresar</a>
-          
 
           </div>
 
@@ -390,7 +354,7 @@ MODAL HISTORIAL COTIZACION
         </div>
         <div class="modal-body">
             
-    <div>
+    <div class="table-responsive">
 
         <table class="table table-striped" id="table">
             <thead class="table-dark">
@@ -400,6 +364,7 @@ MODAL HISTORIAL COTIZACION
                 <th scope="col">Origen Negociacion</th>
                 <th scope="col">Cliente Compartido</th>
                 <th scope="col">Visito Almacen?</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Fecha Seguimiento</th>
                 <th scope="col">Por que no compro?</th>
                 <th scope="col">Valor Factura</th>
@@ -476,6 +441,7 @@ MODAL HISTORIAL COTIZACION
                   <td>'.$valueHistorial["origen_negociacion"].'</td>
                   <td>'.$valueHistorial["cliente_compartido"].'</td>
                   <td>'.$valueHistorial["visita_almacen"].'</td>
+                  <td>'.$valueHistorial["estado_cliente"].'</td>
                   <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valorFechaSeguimiento.'</td>
                   <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;" >'.$valueHistorial["motivo_cliente"].'</td>
                   <td>'.$valueHistorial["valor_factura"].'</td>
@@ -500,7 +466,7 @@ MODAL HISTORIAL COTIZACION
            ?>
           <button class="btn btn-success" style="margin-top:5px">Descargar Historial en Excel</button>
           </a>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -509,7 +475,7 @@ MODAL HISTORIAL COTIZACION
 
   <script type="text/javascript">
   $(document).ready(function () {
-  	$(".modal-dialog").css("width", "85%");
+  	$(".modal-dialog").css("width", "90%");
 
   });
   </script>

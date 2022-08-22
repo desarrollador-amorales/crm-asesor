@@ -1,4 +1,5 @@
 <?php
+$condition="perdidas";
 
 if($_SESSION["perfil"] == "Especial"){
 
@@ -207,6 +208,3 @@ if($xml){
 
 
 </div>
-
-
-

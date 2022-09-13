@@ -36,6 +36,21 @@ class ControladorVentas{
 
 	}
 
+
+	/*=============================================
+	MOSTRAR HISTORIAL GENERAL
+	=============================================*/
+
+	static public function ctrMostrarHistorialReporteGeneral(){
+
+		$tabla = "ventas v, cliente_proforma cp, usuarios u, clientes c";
+
+		$respuesta = ModeloVentas::mdlReporteGeneral($tabla);
+ 
+		return $respuesta;
+
+	}
+
 	/*=============================================
 	MOSTRAR HISTORIAL COTIZACION
 	=============================================*/
@@ -454,7 +469,7 @@ class ControladorVentas{
 			=============================================*/	
 
 			$datos = array("id_vendedor"=>$_POST["idVendedor"],
-						   "id_cliente"=>$_POST["seleccionarCliente"],
+						   "id_cliente"=>isset($_POST["seleccionarCliente"]),
 						   "codigo"=>$_POST["editarVenta"],
 						   "id_actividad"=> $traerVenta["id"],
 						   "productos"=>$listaProductos);
@@ -683,10 +698,10 @@ class ControladorVentas{
 
 		if ($valor2 == "1" or $valor2 == "2" or $valor2 == "3"){
 			
-			$tabla = " cliente_proforma cp, clientes c, usuarios u, ventas v ";	
+			$tabla = " cliente_proforma cp, usuarios u, ventas v ";	
 		}else{
 
-			$tabla = " cliente_proforma cp, clientes c, usuarios u ";
+			$tabla = " cliente_proforma cp, usuarios u ";
 		}
 
 
@@ -706,6 +721,20 @@ class ControladorVentas{
 		$tabla = "cliente_proforma cp, ventas v";
 
 		$respuesta = ModeloVentas::mdlCotizacionesCliente($tabla, $id_asesor, $ced_cliente);
+
+		return $respuesta;
+		
+	}
+
+	/*=============================================
+	CONSULTA PARA REPORTE GENERAL (VENTAS)
+	=============================================*/	
+
+	static public function ctrReportGeneralVentas($fechaInicial, $fechaFinal){
+
+		$tabla = "historial_proforma_reporte hpr";
+
+		$respuesta = ModeloVentas::mdlReporteGeneralVentas($tabla, $fechaInicial, $fechaFinal);
 
 		return $respuesta;
 		
@@ -989,5 +1018,35 @@ class ControladorVentas{
 		}
 
 	}
+
+	/*=============================================
+	MOSTRAR DETALLE CLIENTE RECORRIDO
+	=============================================*/
+
+	static public function ctrMostrarDetalleRecorrido($id){
+
+		$tabla = "recorrido re";
+
+		$respuesta = ModeloVentas::mdlMostrarDetalleRecorrido($tabla, $id);
+ 
+		return $respuesta;
+
+	}
+
+
+	/*=============================================
+	MOSTRAR HISTORIAL RECORRIDO
+	=============================================*/
+
+	static public function ctrMostrarHistorialRecorrido($idRecorrido){
+
+		$tabla = "historial_recorrido hr";
+
+		$respuesta = ModeloVentas::mdlMostrarHistorialRecorrido($tabla, $idRecorrido);
+ 
+		return $respuesta;
+
+	}
+
 
 }

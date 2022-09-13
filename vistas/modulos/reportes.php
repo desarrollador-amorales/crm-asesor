@@ -20,7 +20,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
     
     <h1>
       
-      Reportes de ventas
+      Reportes
     
     </h1>
 
@@ -28,7 +28,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
       
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
       
-      <li class="active">Reportes de ventas</li>
+      <li class="active">Reportes</li>
     
     </ol>
 
@@ -43,7 +43,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
         <div class="input-group">
 
 
-          <button type="button" class="btn btn-default" id="daterange-btn2" >
+          <!--<button type="button" class="btn btn-default" id="daterange-btn2" > 
            
             <span>
               <i class="fa fa-calendar"></i> 
@@ -65,7 +65,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
             <i class="fa fa-caret-down"></i>
 
-          </button>
+          </button>-->
 
         </div>
 
@@ -85,7 +85,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
         ?>
            
-           <button class="btn btn-success" style="margin-top:5px">Descargar reporte en Excel</button>
+           <!--<button class="btn btn-success" style="margin-top:5px">Descargar reporte en Excel</button>-->
 
           </a>
 
@@ -98,20 +98,32 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
         <div class="row">
 
           <div class="col-xs-12">
+
+          <script type='text/javascript' src='https://prod-useast-a.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1920px; height: 922px;'><object class='tableauViz' width='100%' height='922' style='display:none;'><param name='host_url' value='https%3A%2F%2Fprod-useast-a.online.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='&#47;t&#47;clientes' /><param name='name' value='ReportesCRM&#47;FacturasVendidas' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /></object></div>
+
+          <script type='text/javascript' src='https://prod-useast-a.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1920px; height: 922px;'><object class='tableauViz' width='100%' height='922' style='display:none;'><param name='host_url' value='https%3A%2F%2Fprod-useast-a.online.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='&#47;t&#47;clientes' /><param name='name' value='ReportesCRM&#47;ClientesNuevos' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /></object></div>
+
+          <script type='text/javascript' src='https://prod-useast-a.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1920px; height: 922px;'><object class='tableauViz' width='100%' height='922' style='display:none;'><param name='host_url' value='https%3A%2F%2Fprod-useast-a.online.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='&#47;t&#47;clientes' /><param name='name' value='ReportesCRM&#47;NoCotizaciones' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /></object></div>
+
+          <script type='text/javascript' src='https://prod-useast-a.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1920px; height: 922px;'><object class='tableauViz' width='100%' height='922' style='display:none;'><param name='host_url' value='https%3A%2F%2Fprod-useast-a.online.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='&#47;t&#47;clientes' /><param name='name' value='ReportesCRM&#47;EstadodeClientes' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /></object></div>
+
+          <script type='text/javascript' src='https://prod-useast-a.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1920px; height: 922px;'><object class='tableauViz' width='100%' height='922' style='display:none;'><param name='host_url' value='https%3A%2F%2Fprod-useast-a.online.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='&#47;t&#47;clientes' /><param name='name' value='ReportesCRM&#47;OrigenNegociacion' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /></object></div>
+
+          <script type='text/javascript' src='https://prod-useast-a.online.tableau.com/javascripts/api/viz_v1.js'></script><div class='tableauPlaceholder' style='width: 1920px; height: 922px;'><object class='tableauViz' width='100%' height='922' style='display:none;'><param name='host_url' value='https%3A%2F%2Fprod-useast-a.online.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='&#47;t&#47;clientes' /><param name='name' value='ReportesCRM&#47;MotivoPerdidas' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='showAppBanner' value='false' /></object></div>
             
             <?php
 
-            include "reportes/grafico-ventas.php";
-
+            //include "reportes/grafico-ventas.php";
+            
             ?>
 
           </div>
-
+<!--
            <div class="col-md-6 col-xs-12">
              
             <?php
 
-            include "reportes/productos-mas-vendidos.php";
+            //include "reportes/productos-mas-vendidos.php";
 
             ?>
 
@@ -121,7 +133,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
              
             <?php
 
-            include "reportes/vendedores.php";
+            //include "reportes/vendedores.php";
 
             ?>
 
@@ -131,11 +143,11 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
              
             <?php
 
-            include "reportes/compradores.php";
+            //include "reportes/compradores.php";
 
             ?>
 
-           </div>
+           </div> -->
           
         </div>
 

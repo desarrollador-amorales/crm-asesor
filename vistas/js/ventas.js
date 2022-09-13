@@ -171,6 +171,7 @@ var observacion = 0;
 var fechaSeguimiento = 0;
 var valorFactura = 0;
 var visitAlmacen = 0;
+var cotizacion = 0;
 var fecha = 0;
 
 var date = new Date();
@@ -269,6 +270,8 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
                 '<option idCliCompartido= "idCliCompartido" value= "Karla Saldana">Karla Saldaña</option>' +
 
                 '<option idCliCompartido= "idCliCompartido" value= "Belen Morales">Belen Morales</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Alice Minchalo">Alice Minchalo</option>' +
 
                 '</select>' +
 
@@ -415,6 +418,206 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
     })
 
 })
+
+
+
+/**
+ * AGREGAR ACTIVIDAD DE RECORRIDO
+ * */
+
+
+$(".formularioVenta").on("click", ".btnAgregarRecorrido", function() {
+
+
+    numProducto++;
+    estadoCliente++;
+    clienteCompartido++;
+    motivoCliente++;
+    observacion++;
+    fechaSeguimiento++;
+    cotizacion++;
+    fecha++;
+
+
+    var datos = new FormData();
+    datos.append("traerProductos", "ok");
+
+
+    $.ajax({
+        url: "ajax/productos.ajax.php",
+        method: "POST",
+        data: datos,
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function(respuesta) {
+
+
+            $(".nuevoProducto").append(
+
+                '<div class="row" style="padding:5px 15px">' +
+
+                '<!-- Tipo del cliente -->' +
+
+                '<div class="col-xs-2 style="padding-right:0px">' +
+
+                '<div class="input-group">' +
+
+                '<span class="input-group-addon"><button type="button" class="btn btn-danger btn-xs quitarProducto" idProducto><i class="fa fa-times"></i></button></span>' +
+
+                '<!-- Campo Compartido -->' +
+
+                '<select class="form-control nuevoCliCompartido" id="cliCompartido' + clienteCompartido + '" idCliCompartido name="nuevoCliCompartido">' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "">- Cliente Compartido -</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Adrián Rios">Adrián Ríos</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Janneth Luna">Janneth Luna</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Marcelo Vásquez">Marcelo Vásquez</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Juan Nieto">Juan Nieto</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Karla Saldana">Karla Saldaña</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Belen Morales">Belen Morales</option>' +
+
+                '<option idCliCompartido= "idCliCompartido" value= "Alice Minchalo">Alice Minchalo</option>' +
+
+                '</select>' +
+
+                '</div>' +
+
+                '</div>' +
+
+                '<!-- Estado Cliente -->' +
+
+                '<div class="col-xs-2 style="padding-right:0px">' +
+
+                '<select class="form-control nuevoEstadoCliente" id="estadoCliente' + estadoCliente + '" idestadoCliente name="nuevoEstadoCliente" required>' +
+
+                '<option idestadoCliente= "idestadoCliente" value= "">- Estado Cliente -</option>' +
+
+                '<option idestadoCliente= "idestadoCliente" value= "Seguimiento">Seguimiento</option>' +
+
+                '<option idestadoCliente= "idestadoCliente" value= "Perdido">Perdido</option>' +
+
+                '<option idestadoCliente= "idestadoCliente" value= "Paralizado">Paralizado</option>' +
+
+                '<option idestadoCliente= "idestadoCliente" value= "Cotizado">Cotizado</option>' +
+
+                '</select>' +
+
+                '</div>' +
+
+
+                '<!-- Motivo del Cliente -->' +
+
+                '<div class="col-xs-2 style="padding-right:0px">' +
+
+                '<select class="form-control nuevoMotivoCliente" id="motivoCliente' + motivoCliente + '" idmotivoCliente name="nuevoMotivoCliente" required disabled>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "">- ¿Por que se perdió? -</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "Precio">Precio</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "Stock">Stock</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "No es nuestra linea">No es nuestra linea</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "Proveedores Fijos">Proveedores Fijos</option>' +
+
+                '<option idmotivoCliente= "idmotivoCliente" value= "Canje">Canje</option>' +
+
+                '</select>' +
+
+                '</div>' +
+
+                '<!-- Fecha Seguimiento -->' +
+
+                '<div class="col-xs-2" style="padding-left:0px">' +
+
+                '<input type="date" class="form-control nuevoFechaSeguimiento" name="nuevoFechaSeguimiento" id="nuevoFechaSeguimiento' + fechaSeguimiento + '" placeholder="Ingresar fecha" required disabled>' +
+
+                '</div>' +
+
+                '<!-- Valor Factura -->' +
+
+                '<div class="col-xs-1" style="padding-left:0px">' +
+
+                '<input type="numeric" class="form-control nuevoValorCotizacion" name="nuevoValorCotizacion" id="nuevoValorCotizacion' + cotizacion + '" placeholder="Cotizacion" required disabled>' +
+
+                '</div>' +
+
+                '<!--Observacion -->' +
+
+                '<div class="col-xs-12" style="padding-left:14px">' +
+
+                '<input type="text" class="form-control nuevoObservacion"  name="nuevoObservacion"  id ="nuevoObservacion' + observacion + '" placeholder="Ingresar Observacion" required disabled>' +
+
+                '</div>' +
+
+                '<!-- Fecha -->' +
+
+                '<div class="col-xs-1" style="padding-left:0px">' +
+
+                '<input type="hidden" class="form-control nuevoFecha" name="nuevoFecha" id="nuevoFecha' + fecha + '" value="' + today + '" placeholder="" required disabled >' +
+
+                '</div>' +
+
+                '</div>'
+
+            );
+
+
+
+
+            /*=============================================
+            SELECCCIONAR ESTADO RECORRIDO
+            =============================================**/
+
+
+            $(".formularioVenta").on("change", "select.nuevoEstadoCliente", function() {
+                var estado = $(this).val();
+                if (estado == "Cotizado") {
+                    document.getElementById("nuevoValorCotizacion" + cotizacion).disabled = false;
+                } else if (estado != "Cotizado") {
+                    document.getElementById("nuevoValorCotizacion" + cotizacion).disabled = true;
+                }
+
+                if (estado == "Seguimiento" || estado == "Perdido" || estado == "Paralizado") {
+                    document.getElementById("nuevoObservacion" + observacion).disabled = false;
+                } else if (estado != "Seguimiento" || estado != "Perdido" || estado == "Paralizado") {
+                    document.getElementById("nuevoObservacion" + observacion).disabled = true;
+                }
+
+                if (estado == "Seguimiento" || estado == "Cotizado" || estado == "Paralizado") {
+                    document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = false;
+
+                } else if (estado != "Seguimiento" || estado != "Cotizado" || estado == "Paralizado") {
+                    document.getElementById("nuevoFechaSeguimiento" + fechaSeguimiento).disabled = true;
+                }
+
+                if (estado == "Perdido") {
+                    document.getElementById("motivoCliente" + motivoCliente).disabled = false;
+                } else if (estado != "Perdido") {
+                    document.getElementById("motivoCliente" + motivoCliente).disabled = true;
+                }
+
+                listarProductos()
+            })
+
+            localStorage.removeItem("quitarProducto");
+
+        }
+
+
+    })
+
+})
+
 
 
 
@@ -694,6 +897,15 @@ $(".formularioVenta").on("change", "input.nuevoValorFactura", function() {
 })
 
 
+/*=============================================
+SELECCCIONAR NUMERO COTIZACION
+=============================================**/
+
+$(".formularioVenta").on("change", "input.nuevoValorCotizacion", function() {
+    listarProductos()
+})
+
+
 
 /*=============================================
 SUMAR TODOS LOS PRECIOS
@@ -890,30 +1102,57 @@ function listarProductos() {
 
     var fechaSeguimiento = $(".nuevoFechaSeguimiento")
 
+    var cotizacion = $(".nuevoValorCotizacion")
+
     var Observacion = $(".nuevoObservacion");
 
     var valorFactura = $(".nuevoValorFactura");
 
     var fecha = $(".nuevoFecha")
 
+    if (condition == "recorrido") {
 
-    for (var i = 0; i < estadoCliente.length; i++) {
+        for (var i = 0; i < estadoCliente.length; i++) {
 
-        listaProductos.push({
-            "tipo_cliente": $(tipoCliente[i]).val(),
-            "cliente_compartido": $(clienteCompartido[i]).val(),
-            "estado_cliente": $(estadoCliente[i]).val(),
-            "visita_almacen": $(visitaAlmacen[i]).val(),
-            "motivo_cliente": $(motivoCliente[i]).val(),
-            "fecha_seguimiento": $(fechaSeguimiento[i]).val(),
-            "observacion": $(Observacion[i]).val(),
-            "valor_factura": $(valorFactura[i]).val(),
-            "fecha": $(fecha[i]).val()
-        })
+            listaProductos.push({
+                "cliente_compartido": $(clienteCompartido[i]).val(),
+                "estado_recorrido": $(estadoCliente[i]).val(),
+                "motivo_cliente": $(motivoCliente[i]).val(),
+                "fecha_seguimiento": $(fechaSeguimiento[i]).val(),
+                "observacion": $(Observacion[i]).val(),
+                "cotizacion": $(cotizacion[i]).val(),
+                "fecha": $(fecha[i]).val()
+            })
+
+        }
+
+        $("#listaProductos").val(JSON.stringify(listaProductos));
+
+
+    }
+    if (condition == "cotizacion") {
+
+        for (var i = 0; i < estadoCliente.length; i++) {
+
+            listaProductos.push({
+                "tipo_cliente": $(tipoCliente[i]).val(),
+                "cliente_compartido": $(clienteCompartido[i]).val(),
+                "estado_cliente": $(estadoCliente[i]).val(),
+                "visita_almacen": $(visitaAlmacen[i]).val(),
+                "motivo_cliente": $(motivoCliente[i]).val(),
+                "fecha_seguimiento": $(fechaSeguimiento[i]).val(),
+                "observacion": $(Observacion[i]).val(),
+                "valor_factura": $(valorFactura[i]).val(),
+                "fecha": $(fecha[i]).val()
+            })
+
+        }
+
+        $("#listaProductos").val(JSON.stringify(listaProductos));
 
     }
 
-    $("#listaProductos").val(JSON.stringify(listaProductos));
+
 
 }
 
@@ -1271,8 +1510,20 @@ $(".tablas").on("click", ".btnLeerDatos", function() {
         }
 
     })
+})
 
 
+/*=============================================
+BOTON EDITAR RECORRIDO
+=============================================*/
+$(".tablas").on("click", ".btnEditarRecorrido", function() {
 
+    var idVenta = $(this).attr("idVenta");
+    var actividadRealizada = $(this).attr("actividadRealizada");
+    var numeroCotizacion = $(this).attr("numeroCotizacion");
+    var idRecorrido = $(this).attr("idRecorrido");
+
+
+    window.location = "index.php?ruta=editar-venta-recorrido&idVenta=" + idVenta + "&actividadRealizada=" + actividadRealizada + "&numeroCotizacion=" + numeroCotizacion + "&idRecorrido=" + idRecorrido;
 
 })

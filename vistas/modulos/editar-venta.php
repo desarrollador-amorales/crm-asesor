@@ -40,6 +40,7 @@
               <div class="box">
 
                 <?php
+                    $condition = "cotizacion";
 
                     $item = "id";
                     $valor = $_GET["idVenta"];

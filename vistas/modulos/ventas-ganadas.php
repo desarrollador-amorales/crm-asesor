@@ -135,8 +135,8 @@ if($xml){
 
                   <td class="td_cotizacion">'.$value["cotizacion"].'</td>';
 
-                  $itemCliente = "id";
-                  $valorCliente = $value["id_cliente"];
+                  $itemCliente = "cedula";
+                  $valorCliente = $value["ced_cliente"];
 
                   $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
 

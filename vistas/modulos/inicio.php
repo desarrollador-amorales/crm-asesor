@@ -73,7 +73,6 @@
           if($_SESSION["perfil"] =="Administrador"){
           
            include "inicio/productos-recientes.php";
-
          }
 
           ?>

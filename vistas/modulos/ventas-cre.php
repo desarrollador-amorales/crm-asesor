@@ -132,6 +132,9 @@ if($xml){
           $respuesta = ControladorVentas::ctrRangoFechasCotizacionCliente($fechaInicial, $fechaFinal, $item, $valor,$valor2);
           $id_actividad= null;
 
+          $stmt= Conexion::conectar()->prepare("TRUNCATE TABLE clientes_excluidos");
+          $stmt->execute();
+
           foreach ($respuesta as $key => $value) {
            
            echo '<tr>
@@ -140,12 +143,34 @@ if($xml){
 
                   <td class="td_cotizacion">'.$value["cotizacion"].'</td>';
 
-                  $itemCliente = "id";
-                  $valorCliente = $value["id_cliente"];
+                  $itemCliente = "cedula";
+                  $valorCliente = $value["ced_cliente"];
 
                   $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
 
-                  echo '<td>'.$respuestaCliente["nombre"].'</td>';
+                  if ($respuestaCliente["nombre"] == "" or $respuestaCliente["nombre"] == null){
+
+                    $stmt=Conexion::conectar()->prepare("INSERT INTO clientes_excluidos(cedula) VALUES (:cedula)");
+
+                    $stmt->bindParam(":cedula", $valorCliente, PDO::PARAM_STR);
+
+                    $stmt->execute();
+                  
+                  }
+
+                  $condicion_recorrido =substr($value['cotizacion'],0,3);
+                  $idRecorrido=substr($value['cotizacion'],3,strlen($value['cotizacion']));
+
+                  if ($condicion_recorrido == 'EXT'){
+
+                    echo '<td>'.$value["ced_cliente"].'</td>';
+
+                  }else {
+
+                    echo '<td>'.$respuestaCliente["nombre"].'</td>';
+
+                  }
+                
 
                   echo '<td>'.$value["nombre_almacen"].'</td>';
 
@@ -175,7 +200,9 @@ if($xml){
 
                         <i class="fa fa-print"></i>PDF
 
-                      </button> -->' ; 
+                      </button> -->' ;
+                      
+                      $id_actividad= null;
 
                       if($_SESSION["perfil"] == "Vendedor" ){
 
@@ -195,10 +222,17 @@ if($xml){
                           }
     
                         $codigo = $valueCode["codigo"]  + 1;
-    
+
+                        $cliente_id=null;
+                          
+                        if ($condicion_recorrido == 'EXT'){
+                            $cliente_id= '99';
+                        }else{
+                            $cliente_id=$respuestaCliente["id"];
+                        }
 
                         $datos = array("id_vendedor"=>$value["id_asesor_interno"],
-						                           "id_cliente"=>$value["id_cliente"],
+						                           "id_cliente"=>$cliente_id,
 						                           "codigo"=>$codigo,
 						                           "productos"=>$campo_vacio);
 
@@ -223,18 +257,34 @@ if($xml){
                         
                         $numCotizaciones = ControladorVentas::ctrCotizacionesCliente($_SESSION["usuario"],$respuestaCliente["cedula"] );
 
-                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"numCotizaciones="'.$numCotizaciones["num"].'" cotizaciones="'.$numCotizaciones["cotizaciones"].'"><i class="fa fa-pencil"></i></button>';
+                        if ($condicion_recorrido == 'EXT'){
 
-                        echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$value["id_almacen"].'"></i> Relacionar</button></span>';                   
-  
+                          echo '<button class="btn btn-warning btnEditarRecorrido" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idRecorrido="'.$idRecorrido.'"><i class="fa fa-pencil"></i></button>';
+
+                        }else{
+
+                          echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"numCotizaciones="'.$numCotizaciones["num"].'" cotizaciones="'.$numCotizaciones["cotizaciones"].'"><i class="fa fa-pencil"></i></button>';
+
+                          echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$value["id_almacen"].'"></i> Relacionar</button></span>';                   
+
+                        }
+
                       }
 
 
                       if($_SESSION["perfil"] == "Administrador" ){
+                        
+                        if ($condicion_recorrido == 'EXT'){
 
-                      echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
+                          echo '<button class="btn btn-warning btnEditarRecorrido" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idRecorrido="'.$idRecorrido.'"><i class="fa fa-pencil"></i></button>';
 
-                      <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
+                        }else{
+
+                          echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
+
+                          <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
+
+                        }
 
                     }
 

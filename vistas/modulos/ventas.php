@@ -29,7 +29,7 @@ if($xml){
     
     <h1>
       
-      Administrar Actividades
+      Agenda
     
     </h1>
 
@@ -37,7 +37,7 @@ if($xml){
       
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
       
-      <li class="active">Administrar Actividades</li>
+      <li class="active">Agenda</li>
     
     </ol>
 
@@ -163,14 +163,25 @@ if($xml){
 
                   <td class="td_cotizacion">'.$value["cotizacion"].'</td>';
 
-                  $itemCliente = "id";
-                  $valorCliente = $value["id_cliente"];
+                  $itemCliente = "cedula";
+                  $valorCliente = $value["ced_cliente"];
 
                   $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
 
-                  echo '<td>'.$respuestaCliente["nombre"].'</td>
+                  $condicion_recorrido =substr($value['cotizacion'],0,3);
+                  $idRecorrido=substr($value['cotizacion'],3,strlen($value['cotizacion']));
 
-                  <td>'.$value["nombre_almacen"].'</td>';
+                  if ($condicion_recorrido == 'EXT'){
+
+                    echo '<td>'.$value["ced_cliente"].'</td>';
+
+                  }else {
+
+                    echo '<td>'.$respuestaCliente["nombre"].'</td>';
+
+                  }
+
+                  echo '<td>'.$value["nombre_almacen"].'</td>';
 
                   if($_SESSION["perfil"] == "Administrador"){
 
@@ -180,7 +191,7 @@ if($xml){
 
                   if($_SESSION["perfil"] == "Vendedor"){
 
-                    echo '<td>'.$value["telefono"].'</td>';
+                    echo '<td>'.$respuestaCliente["telefono"].'</td>';
  
                    }
 
@@ -208,20 +219,35 @@ if($xml){
 
                         $numCotizaciones = ControladorVentas::ctrCotizacionesCliente($_SESSION["usuario"],$respuestaCliente["cedula"] );
 
+                        if ($condicion_recorrido == 'EXT'){
+
+                          echo '<button class="btn btn-warning btnEditarRecorrido" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idRecorrido="'.$idRecorrido.'"><i class="fa fa-pencil"></i></button>';
+
+                        }else{
+
                         echo '<button class="btn btn-warning btnEditarVenta" id_session = "'.$_SESSION["id"].'" id_vendedor = "'.$value["id_asesor_interno"].'" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"numCotizaciones="'.$numCotizaciones["num"].'" cotizaciones="'.$numCotizaciones["cotizaciones"].'"><i class="fa fa-pencil"></i></button>';
 
                         echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$value["id_almacen"].'"></i> Relacionar</button></span>';                   
   
+                        }
+
                       }
 
 
                       if($_SESSION["perfil"] == "Administrador" ){
 
-                      echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
+                        if ($condicion_recorrido == 'EXT'){
 
-                      <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
+                          echo '<button class="btn btn-warning btnEditarRecorrido" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idRecorrido="'.$idRecorrido.'"><i class="fa fa-pencil"></i></button>';
 
-                    }
+                        }else{
+
+                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
+
+                        <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
+
+                          }
+                      }
 
                     echo '</div>  
 

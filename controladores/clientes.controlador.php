@@ -107,6 +107,21 @@ class ControladorClientes{
 
 	}
 
+	
+	/*=============================================
+	MOSTRAR CLIENTES RECORRIDOS
+	=============================================*/
+
+	static public function ctrMostrarClientesRecorrido($item, $valor){
+
+		$tabla = "recorrido";
+
+		$respuesta = ModeloClientes::mdlMostrarClientesRecorrido($tabla, $item, $valor);
+
+		return $respuesta;
+
+	}
+
 
 	
 	/*=============================================
@@ -313,20 +328,214 @@ class ControladorClientes{
 
 	}
 
-
 	/*=============================================
-	MOSTRAR CLIENTES EXTERNA
-	=============================================
+	CREAR CLIENTES RECORRIDO
+	=============================================*/
 
-	static public function ctrMostrarClientesExterno(){
+	static public function ctrCrearClienteRecorrido(){
 
-		$tabla = "Clientes";
+		if(isset($_POST["nuevoObra"])){
 
-		$respuesta = ModeloClientes::mdlListarClientesBaseExterna($tabla);
+			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoObra"])){
 
-		return $respuesta;
+			   	$tabla = "recorrido";
 
-	} */
+			   	$datos = array("obra"=>$_POST["nuevoObra"],
+							   "callePrincipal"=> $_POST["nuevoCallePrincipal"],
+					           "calleSecundaria"=>$_POST["nuevoCalleSecundaria"],
+					           "sector"=>$_POST["nuevaSector"],
+					           "ciudad"=>$_POST["nuevaCiudad"],
+					           "observacion"=>$_POST["nuevaObservacion"],
+							   "etapa"=>$_POST["etapa"],
+							   "ubicacion"=>$_POST["nuevaUbicacion"],
+							   "nom_arq"=>$_POST["nuevaNomArq"],
+							   "ape_arq"=>$_POST["nuevaApeArq"],
+							   "tele_arq"=>$_POST["nuevoTelefonoArq"],
+							   "nom_obra"=>$_POST["nuevaNomObra"],
+							   "ape_obra"=>$_POST["nuevaApeObra"],
+							   "tele_obra"=>$_POST["nuevoTelefonoObra"],
+							   "nom_maes"=>$_POST["nuevaNomMaes"],
+							   "ape_maes"=>$_POST["nuevaApeMaes"],
+							   "tele_maes"=>$_POST["nuevoTelefonoMaes"],
+							   "id_asesor"=> $_SESSION["usuario"]							   
+							);
+
+
+			   	$respuesta = ModeloClientes::mdlIngresarClienteRecorrido($tabla, $datos);
+
+			   	if($respuesta == "ok"){
+
+					echo'<script>
+
+					swal({
+						  type: "success",
+						  title: "El cliente ha sido guardado correctamente",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+									if (result.value) {
+
+									window.location = "recorrido";
+
+									}
+								})
+
+					</script>';
+
+				}
+
+			}else{
+
+				echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡El cliente no puede ir vacío o llevar caracteres especiales!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+			  	</script>';
+
+
+
+			}
+
+		}
+
+	}
+
+
+		/*=============================================
+	EDITAR CLIENTE RECORRIDO
+	=============================================*/
+
+	static public function ctrEditarClienteRecorrido(){
+
+		if(isset($_POST["editarObra"])){
+
+			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editarObra"]) )
+			   
+			   {
+			   
+			   	$tabla = "recorrido";
+
+				 $datos = array("id"=>$_POST["idCliente"],
+				 "obra"=>$_POST["editarObra"],
+				 "calle_principal"=>$_POST["editarCallePrincipal"],
+				 "calle_secundaria"=> $_POST["editarCalleSecundaria"],
+				 "sector"=>$_POST["editarSector"],
+				 "ciudad"=>$_POST["editarCiudad"],
+				 "observacion"=>$_POST["editarObservacion"],
+				 "etapa"=>$_POST["editarEtapa"],
+				 "ubicacion"=>$_POST["editarUbicacion"],
+				 "nom_arq"=>$_POST["editarNomArq"],
+				 "ape_arq"=>$_POST["editarApeArq"],
+				 "tele_arq"=>$_POST["editarTelefonoArq"],
+				 "nom_obra"=>$_POST["editarNomObra"],
+				 "ape_obra"=>$_POST["editarApeObra"],
+				 "tele_obra"=>$_POST["editarTelefonoObra"],
+				 "nom_maes"=>$_POST["editarNomMaes"],
+				 "ape_maes"=>$_POST["editarApeMaes"],
+				 "tele_maes"=>$_POST["editarTelefonoMaes"],
+
+				 
+			  );
+
+			   	$respuesta = ModeloClientes::mdlEditarClienteRecorrido($tabla, $datos);
+
+			   	if($respuesta == "ok"){
+
+					echo'<script>
+
+					swal({
+						  type: "success",
+						  title: "La Cliente ha sido actualizado correctamente",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+									if (result.value) {
+
+									window.location = "recorrido";
+
+									}
+								})
+
+					</script>';
+
+				}
+
+			}else{
+
+				echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡La Actividad no puede ir vacío o llevar caracteres especiales!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+			  	</script>';
+
+
+
+			}
+
+		}
+
+	}
+
+   /*=============================================
+	ELIMINAR CLIENTE
+	=============================================*/
+
+	static public function ctrEliminarClienteRecorrido(){
+
+		if(isset($_GET["idCliente"])){
+
+			$tabla ="recorrido";
+			$datos = $_GET["idCliente"];
+
+			$respuesta = ModeloClientes::mdlEliminarCliente($tabla, $datos);
+
+			if($respuesta == "ok"){
+
+				echo'<script>
+
+				swal({
+					  type: "success",
+					  title: "El cliente ha sido borrado correctamente",
+					  showConfirmButton: true,
+					  confirmButtonText: "Cerrar",
+					  closeOnConfirm: false
+					  }).then(function(result){
+								if (result.value) {
+
+								window.location = "recorrido";
+
+								}
+							})
+
+				</script>';
+
+			}		
+
+		}
+
+	}
 
 }
 

@@ -73,6 +73,22 @@
 
 		}
 
+
+		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor"){
+
+			echo '<li>
+
+				<a href="recorrido">
+
+					<i class="fa fa-map-marker"></i>
+					<span>Recorridos</span>
+
+				</a>
+
+			</li>';
+
+		}
+
 		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor"){
 
 			echo '<li class="treeview">

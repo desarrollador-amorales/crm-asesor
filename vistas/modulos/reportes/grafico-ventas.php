@@ -15,7 +15,7 @@ $item=null;
 
 }
 
-$respuesta = ControladorVentas::ctrRangoFechasVentas($fechaInicial, $fechaFinal,$item, $valor);
+//$respuesta = ControladorVentas::ctrReportGeneralVentas($fechaInicial, $fechaFinal);
 
 $arrayFechas = array();
 $arrayVentas = array();
@@ -49,7 +49,6 @@ $noRepetirFechas = array_unique($arrayFechas);
 <!--=====================================
 GRÁFICO DE VENTAS
 ======================================-->
-
 
 <div class="box box-solid bg-teal-gradient">
 	

@@ -131,6 +131,7 @@
                     
                     <!-- <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalAgregarCliente" data-dismiss="modal">Agregar cliente</button></span> -->
                     <input type="text" class="form-control" id="numeroCotizacion" name="numeroCotizacion" value="<?php echo $numeroCotizacion ?>" readonly>
+                    <input type="text" class="form-control" id="numeroCelular" name="numeroCelular" value="<?php echo $cliente["telefono"] ?>" readonly>
                   
                   </div>
 

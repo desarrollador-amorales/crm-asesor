@@ -43,7 +43,8 @@ class ControladorVentas{
 
 	static public function ctrMostrarHistorialReporteGeneral(){
 
-		$tabla = "ventas v, cliente_proforma cp, usuarios u, clientes c";
+		//$tabla = "ventas v, cliente_proforma cp, usuarios u, clientes c";
+		$tabla = "ventas v, cliente_proforma cp, usuarios u";
 
 		$respuesta = ModeloVentas::mdlReporteGeneral($tabla);
  
@@ -469,7 +470,7 @@ class ControladorVentas{
 			=============================================*/	
 
 			$datos = array("id_vendedor"=>$_POST["idVendedor"],
-						   "id_cliente"=>isset($_POST["seleccionarCliente"]),
+						   "id_cliente"=>$_POST["seleccionarCliente"],
 						   "codigo"=>$_POST["editarVenta"],
 						   "id_actividad"=> $traerVenta["id"],
 						   "productos"=>$listaProductos);

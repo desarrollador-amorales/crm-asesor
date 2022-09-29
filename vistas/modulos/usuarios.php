@@ -58,6 +58,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
            <th style="width:10px">#</th>
            <th>Nombre</th>
            <th>Usuario</th>
+           <th>Ubicacion</th>
            <th>Foto</th>
            <th>Perfil</th>
            <th>Estado</th>
@@ -82,7 +83,8 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
           echo ' <tr>
                   <td>'.($key+1).'</td>
                   <td>'.$value["nombre"].'</td>
-                  <td>'.$value["usuario"].'</td>';
+                  <td>'.$value["usuario"].'</td>
+                  <td>'.$value["ubicacion"].'</td>';
 
                   if($value["foto"] != ""){
 
@@ -235,6 +237,32 @@ MODAL AGREGAR USUARIO
 
             </div>
 
+          <!-- ENTRADA PARA SELECCIONAR SU UBICACION -->
+
+           <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
+
+                <select class="form-control input-lg" name="nuevoUbicacion">
+                  
+                  <option value="">Selecionar Ubicacion</option>
+
+                  <option value="Cuenca">Cuenca</option>
+
+                  <option value="Ambato">Ambato</option>
+
+                  <option value="Quito">Quito</option>
+
+                  <option value="Guayaquil">Guayaquil</option>
+
+                </select>
+
+              </div>
+
+            </div>
+
             <!-- ENTRADA PARA SUBIR FOTO -->
 
              <div class="form-group">
@@ -373,6 +401,33 @@ MODAL EDITAR USUARIO
                   <option value="Especial">Especial</option>
 
                   <option value="Vendedor">Vendedor</option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <!-- ENTRADA PARA SELECCIONAR SU UBICACION -->
+
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-users"></i></span> 
+
+                <select class="form-control input-lg" name="editarUbicacion">
+                  
+                  <option value="" id="editarUbicacion"></option>
+
+                  <option value="Cuenca">Cuenca</option>
+
+                  <option value="Ambato">Ambato</option>
+
+                  <option value="Quito">Quito</option>
+
+                  <option value="Guayaquil">Guayaquil</option>
 
                 </select>
 

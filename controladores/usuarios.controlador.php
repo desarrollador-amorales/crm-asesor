@@ -33,6 +33,7 @@ class ControladorUsuarios{
 						$_SESSION["usuario"] = $respuesta["usuario"];
 						$_SESSION["foto"] = $respuesta["foto"];
 						$_SESSION["perfil"] = $respuesta["perfil"];
+						$_SESSION["ubicacion"] = $respuesta["ubicacion"];
 
 						/*=============================================
 						REGISTRAR FECHA PARA SABER EL ÚLTIMO LOGIN
@@ -170,6 +171,7 @@ class ControladorUsuarios{
 					           "usuario" => $_POST["nuevoUsuario"],
 					           "password" => $_POST["nuevoPassword"],
 					           "perfil" => $_POST["nuevoPerfil"],
+							   "ubicacion" => $_POST["nuevoUbicacion"],
 					           "foto"=>$ruta);
 
 				$respuesta = ModeloUsuarios::mdlIngresarUsuario($tabla, $datos);
@@ -378,6 +380,7 @@ class ControladorUsuarios{
 							   "usuario" => $_POST["editarUsuario"],
 							   "password" => $encriptar,
 							   "perfil" => $_POST["editarPerfil"],
+							   "ubicacion" => $_POST["editarUbicacion"],
 							   "foto" => $ruta);
 
 				$respuesta = ModeloUsuarios::mdlEditarUsuario($tabla, $datos);

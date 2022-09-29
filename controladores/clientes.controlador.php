@@ -11,7 +11,6 @@ class ControladorClientes{
 		if(isset($_POST["nuevoCliente"])){
 
 			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoCliente"]) &&
-			   //preg_match('/^[0-9]+$/', $_POST["nuevoDocumentoId"]) &&
 			   preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/', $_POST["nuevoEmail"]) && 
 			   preg_match('/^[()\-0-9 ]+$/', $_POST["nuevoTelefono"]) && 
 			   preg_match('/^[#\.\-a-zA-Z0-9 ]+$/', $_POST["nuevaDireccion"])){
@@ -336,11 +335,57 @@ class ControladorClientes{
 
 		if(isset($_POST["nuevoObra"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoObra"])){
+			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]*+$/', $_POST["nuevoObra"]))
+			{
 
 			   	$tabla = "recorrido";
 
-			   	$datos = array("obra"=>$_POST["nuevoObra"],
+
+				if (($_POST["contacto1"] == null or $_POST["contacto1"] == '') &&
+				   ($_POST["contacto2"] == null or $_POST["contacto2"] == '')) {
+					echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡El cliente debe tener al menos un tipo de Contacto!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+			  	</script>';
+
+				}
+
+
+				if(($_POST["nuevoTelefono1"] == null or LTRIM($_POST["nuevoTelefono1"]) == '') &&
+				   ($_POST["nuevoTelefono2"] == null or LTRIM($_POST["nuevoTelefono2"]) == '') 
+				){
+
+					echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡El cliente debe tener al menos un número telefónico!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+			  	</script>';
+
+				}else{
+					$datos = array("obra"=>$_POST["nuevoObra"],
 							   "callePrincipal"=> $_POST["nuevoCallePrincipal"],
 					           "calleSecundaria"=>$_POST["nuevoCalleSecundaria"],
 					           "sector"=>$_POST["nuevaSector"],
@@ -348,20 +393,40 @@ class ControladorClientes{
 					           "observacion"=>$_POST["nuevaObservacion"],
 							   "etapa"=>$_POST["etapa"],
 							   "ubicacion"=>$_POST["nuevaUbicacion"],
-							   "nom_arq"=>$_POST["nuevaNomArq"],
-							   "ape_arq"=>$_POST["nuevaApeArq"],
-							   "tele_arq"=>$_POST["nuevoTelefonoArq"],
-							   "nom_obra"=>$_POST["nuevaNomObra"],
-							   "ape_obra"=>$_POST["nuevaApeObra"],
-							   "tele_obra"=>$_POST["nuevoTelefonoObra"],
-							   "nom_maes"=>$_POST["nuevaNomMaes"],
-							   "ape_maes"=>$_POST["nuevaApeMaes"],
-							   "tele_maes"=>$_POST["nuevoTelefonoMaes"],
+							   "contacto1"=>$_POST["contacto1"],
+							   "contacto2"=>$_POST["contacto2"],
+							   "nom1"=>$_POST["nuevaNom1"],
+							   "ape1"=>$_POST["nuevaApe1"],
+							   "tele1"=>LTRIM($_POST["nuevoTelefono1"]),
+							   "nom2"=>$_POST["nuevaNom2"],
+							   "ape2"=>$_POST["nuevaApe2"],
+							   "tele2"=>LTRIM($_POST["nuevoTelefono2"]),
 							   "id_asesor"=> $_SESSION["usuario"]							   
 							);
 
 
 			   	$respuesta = ModeloClientes::mdlIngresarClienteRecorrido($tabla, $datos);
+
+			   	if($respuesta == "ok_valida"){
+
+				echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡El cliente ya esta ingresado!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+			  	</script>';
+
+				}
 
 			   	if($respuesta == "ok"){
 
@@ -383,6 +448,7 @@ class ControladorClientes{
 					</script>';
 
 				}
+			}		   	
 
 			}else{
 
@@ -403,8 +469,6 @@ class ControladorClientes{
 
 			  	</script>';
 
-
-
 			}
 
 		}
@@ -412,7 +476,7 @@ class ControladorClientes{
 	}
 
 
-		/*=============================================
+	/*=============================================
 	EDITAR CLIENTE RECORRIDO
 	=============================================*/
 
@@ -420,35 +484,99 @@ class ControladorClientes{
 
 		if(isset($_POST["editarObra"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editarObra"]) )
-			   
-			   {
+			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]*+$/', $_POST["editarObra"]))
+			{
 			   
 			   	$tabla = "recorrido";
+			
+				if (($_POST["editarcontacto1"] == null or $_POST["editarcontacto1"] == '') &&
+					($_POST["editarcontacto2"] == null or $_POST["editarcontacto2"] == '')) {
+				echo'<script>
+
+					swal({
+							type: "error",
+							title: "¡El cliente debe tener al menos un tipo de Contacto!",
+							showConfirmButton: true,
+							confirmButtonText: "Cerrar"
+							}).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+				</script>';
+
+				}
+
+			    if(($_POST["editarTelefono1"] == null or LTRIM($_POST["editarTelefono1"]) == '') &&
+				   ($_POST["editarTelefono2"] == null or LTRIM($_POST["editarTelefono2"]) == '') )
+				{
+
+					echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡El cliente debe tener al menos un número telefónico!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {
+
+							window.location = "recorrido";
+
+							}
+						})
+
+			  	</script>';
+
+				} 
+				
+				else{
 
 				 $datos = array("id"=>$_POST["idCliente"],
 				 "obra"=>$_POST["editarObra"],
-				 "calle_principal"=>$_POST["editarCallePrincipal"],
-				 "calle_secundaria"=> $_POST["editarCalleSecundaria"],
+				 "callePrincipal"=>$_POST["editarCallePrincipal"],
+				 "calleSecundaria"=> $_POST["editarCalleSecundaria"],
 				 "sector"=>$_POST["editarSector"],
 				 "ciudad"=>$_POST["editarCiudad"],
 				 "observacion"=>$_POST["editarObservacion"],
 				 "etapa"=>$_POST["editarEtapa"],
 				 "ubicacion"=>$_POST["editarUbicacion"],
-				 "nom_arq"=>$_POST["editarNomArq"],
-				 "ape_arq"=>$_POST["editarApeArq"],
-				 "tele_arq"=>$_POST["editarTelefonoArq"],
-				 "nom_obra"=>$_POST["editarNomObra"],
-				 "ape_obra"=>$_POST["editarApeObra"],
-				 "tele_obra"=>$_POST["editarTelefonoObra"],
-				 "nom_maes"=>$_POST["editarNomMaes"],
-				 "ape_maes"=>$_POST["editarApeMaes"],
-				 "tele_maes"=>$_POST["editarTelefonoMaes"],
-
-				 
+				 "contacto1"=>$_POST["editarcontacto1"],
+				 "contacto2"=>$_POST["editarcontacto2"],
+				 "nom1"=>$_POST["editarNom1"],
+				 "ape1"=>$_POST["editarApe1"],
+				 "tele1"=>LTRIM($_POST["editarTelefono1"]),
+				 "nom2"=>$_POST["editarNom2"],
+				 "ape2"=>$_POST["editarApe2"],
+				 "tele2"=>LTRIM($_POST["editarTelefono2"])		 
 			  );
 
 			   	$respuesta = ModeloClientes::mdlEditarClienteRecorrido($tabla, $datos);
+
+
+				   if($respuesta == "ok_valida"){
+
+					echo'<script>
+	
+						swal({
+							  type: "error",
+							  title: "¡El cliente ya esta ingresado!",
+							  showConfirmButton: true,
+							  confirmButtonText: "Cerrar"
+							  }).then(function(result){
+								if (result.value) {
+	
+								window.location = "recorrido";
+	
+								}
+							})
+	
+					  </script>';
+	
+					}
 
 			   	if($respuesta == "ok"){
 
@@ -470,6 +598,7 @@ class ControladorClientes{
 					</script>';
 
 				}
+			}
 
 			}else{
 
@@ -477,7 +606,7 @@ class ControladorClientes{
 
 					swal({
 						  type: "error",
-						  title: "¡La Actividad no puede ir vacío o llevar caracteres especiales!",
+						  title: "¡El Cliente no puede ir vacío o llevar caracteres especiales!",
 						  showConfirmButton: true,
 						  confirmButtonText: "Cerrar"
 						  }).then(function(result){

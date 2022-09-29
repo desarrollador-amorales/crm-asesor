@@ -223,64 +223,258 @@ class ModeloClientes{
 
 		$pdo = new PDO("mysql:host=localhost;dbname=sis_inventario","root","");
 
-		$stmt = $pdo->prepare("INSERT INTO $tabla(fecha, asesor, obra, calle_principal, calle_secundaria, sector, ciudad, observaciones, etapa, ubicacion, nombre_arq, apellido_arq, celular_arq, nombre_obra, apellido_obra, celular_obra, nombre_maes_obr, apellido_maes_obr, celular_maes_obr) 
-		VALUES (NOW(), :asesor, :obra, :calle_principal, :calle_secundaria, :sector, :ciudad, :observaciones, :etapa, :ubicacion, :nombre_arq, :apellido_arq, :celular_arq, :nombre_obra, :apellido_obra, :celular_obra, :nombre_maes_obr, :apellido_maes_obr, :celular_maes_obr)");
+		if ($datos["tele1"] != ''){
+			
+			$stmtVal = Conexion::conectar()->prepare("SELECT * FROM clientes_duramas WHERE (CliCelular = :celular1 ) and CliCelular != '' ");
+			$stmtVal -> bindParam(":celular1", $datos["tele1"], PDO::PARAM_STR);
+		}
+		if ($datos["tele2"] != ''){
+			
+			$stmtVal = Conexion::conectar()->prepare("SELECT * FROM clientes_duramas WHERE (CliCelular = :celular2 ) and CliCelular != '' ");
+			$stmtVal -> bindParam(":celular2", $datos["tele2"], PDO::PARAM_STR);
+		}
 
-		$stmt->bindParam(":obra", $datos["obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":calle_principal", $datos["callePrincipal"], PDO::PARAM_STR);
-		$stmt->bindParam(":calle_secundaria", $datos["calleSecundaria"], PDO::PARAM_STR);
-		$stmt->bindParam(":sector", $datos["sector"], PDO::PARAM_STR);
-		$stmt->bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
-		$stmt->bindParam(":observaciones", $datos["observacion"], PDO::PARAM_STR);
-		$stmt->bindParam(":etapa", $datos["etapa"], PDO::PARAM_STR);
-		$stmt->bindParam(":ubicacion", $datos["ubicacion"], PDO::PARAM_STR);
-
-		$stmt->bindParam(":nombre_arq", $datos["nom_arq"], PDO::PARAM_STR);
-		$stmt->bindParam(":apellido_arq", $datos["ape_arq"], PDO::PARAM_STR);
-		$stmt->bindParam(":celular_arq", $datos["tele_arq"], PDO::PARAM_STR);
-
-		$stmt->bindParam(":nombre_obra", $datos["nom_obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":apellido_obra", $datos["ape_obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":celular_obra", $datos["tele_obra"], PDO::PARAM_STR);
-
-		$stmt->bindParam(":nombre_maes_obr", $datos["nom_maes"], PDO::PARAM_STR);
-		$stmt->bindParam(":apellido_maes_obr", $datos["ape_maes"], PDO::PARAM_STR);
-		$stmt->bindParam(":celular_maes_obr", $datos["tele_maes"], PDO::PARAM_STR);
+		if ($datos["tele1"] != '' && $datos["tele2"] != '' ){
+			
+			$stmtVal = Conexion::conectar()->prepare("SELECT * FROM clientes_duramas WHERE (CliCelular =:celular1 or CliCelular =:celular2 ) and CliCelular != '' ");
+			$stmtVal -> bindParam(":celular1", $datos["tele1"], PDO::PARAM_STR);
+			$stmtVal -> bindParam(":celular2", $datos["tele2"], PDO::PARAM_STR);
+		}
 		
-		$stmt->bindParam(":asesor",$datos["id_asesor"] , PDO::PARAM_STR);
 
-		if($stmt->execute()){
+		$stmtVal -> execute();
 
-			$id_cotizacion = 'EXT'.$pdo->lastInsertId();
+		if ($datos["tele1"] != ''){
+			
+			$stmtValInt = Conexion::conectar()->prepare("SELECT * FROM recorrido WHERE (celular_arq = :celular1 or celular_obra =:celular1 or celular_maes_obr =:celular1 )");
+			$stmtValInt -> bindParam(":celular1", $datos["tele1"], PDO::PARAM_STR);
+		}
+		if ($datos["tele2"] != ''){
+			
+			$stmtValInt = Conexion::conectar()->prepare("SELECT * FROM recorrido WHERE (celular_arq = :celular2 or celular_obra =:celular2 or celular_maes_obr =:celular2 ) ");
+			$stmtValInt -> bindParam(":celular2", $datos["tele2"], PDO::PARAM_STR);
+		}
 
-			$stmt2 = Conexion::conectar()->prepare("INSERT INTO cliente_proforma(id_asesor, ced_cliente, nombre_almacen, cotizacion, fecha_cotizacion, relacionado, UsuIde) 
-			VALUES (:id_asesor,:ced_cliente, 'RECORRIDO', :cotizacion, NOW(), '0', :usu_ide)");
+		if ($datos["tele1"] != '' && $datos["tele2"] != '' ){
+			
+			$stmtValInt = Conexion::conectar()->prepare("SELECT * FROM recorrido WHERE (celular_arq = :celular1 or celular_obra =:celular1 or celular_maes_obr =:celular1 ) or (celular_arq = :celular2 or celular_obra =:celular2 or celular_maes_obr =:celular2 ) ");
+			$stmtValInt -> bindParam(":celular1", $datos["tele1"], PDO::PARAM_STR);
+			$stmtValInt -> bindParam(":celular2", $datos["tele2"], PDO::PARAM_STR);
+		}
 
-			$propietario='';
-			if ($datos["nom_arq"]!= null){
-				$propietario = $datos["nom_arq"].' '.$datos["ape_arq"];
-			}else if($datos["nom_obra"]!= null){
-				$propietario = $datos["nom_obra"].' '.$datos["ape_obra"];
-			}else if($datos["nom_maes"]!= null){
-				$propietario = $datos["nom_maes"].' '.$datos["nom_maes"];
-			}
-	
-			$stmt2->bindParam(":id_asesor", $datos["id_asesor"], PDO::PARAM_STR);
-			$stmt2->bindParam(":cotizacion", $id_cotizacion, PDO::PARAM_STR);
-			$stmt2->bindParam(":ced_cliente", $propietario, PDO::PARAM_STR);
-			$stmt2->bindParam(":usu_ide", $datos["id_asesor"], PDO::PARAM_STR);
-			$stmt2->execute();
+		$stmtValInt ->execute();
 
-			return "ok";
+		if ($stmtVal -> fetchAll() != null || $stmtValInt -> fetchAll() != null){
+			return "ok_valida";
 
 		}else{
 
-			return "error";
+			$stmt = $pdo->prepare("INSERT INTO $tabla(fecha, asesor, obra, calle_principal, calle_secundaria, sector, ciudad, observaciones, etapa, ubicacion, contacto1, contacto2, nombre_arq, apellido_arq, celular_arq, nombre_obra, apellido_obra, celular_obra, nombre_maes_obr, apellido_maes_obr, celular_maes_obr) 
+			VALUES (NOW(), :asesor, :obra, :calle_principal, :calle_secundaria, :sector, :ciudad, :observaciones, :etapa, :ubicacion, :contacto1, :contacto2, :nombre_arq, :apellido_arq, :celular_arq, :nombre_obra, :apellido_obra, :celular_obra, :nombre_maes_obr, :apellido_maes_obr, :celular_maes_obr)");
+			$vacio=null;
+
+			$stmt->bindParam(":asesor",$datos["id_asesor"] , PDO::PARAM_STR);
+			$stmt->bindParam(":obra", $datos["obra"], PDO::PARAM_STR);
+			$stmt->bindParam(":calle_principal", $datos["callePrincipal"], PDO::PARAM_STR);
+			$stmt->bindParam(":calle_secundaria", $datos["calleSecundaria"], PDO::PARAM_STR);
+			$stmt->bindParam(":sector", $datos["sector"], PDO::PARAM_STR);
+			$stmt->bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
+			$stmt->bindParam(":observaciones", $datos["observacion"], PDO::PARAM_STR);
+			$stmt->bindParam(":etapa", $datos["etapa"], PDO::PARAM_STR);
+			$stmt->bindParam(":ubicacion", $datos["ubicacion"], PDO::PARAM_STR);
+			$stmt->bindParam(":contacto1", $datos["contacto1"], PDO::PARAM_STR);
+			$stmt->bindParam(":contacto2", $datos["contacto2"], PDO::PARAM_STR);
+
+
+			if(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Profesional') &&
+				($datos["contacto2"]!= '' && $datos["contacto2"] == 'Dueno')
+			 ){
+			 $stmt->bindParam(":nombre_arq", $datos["nom1"], PDO::PARAM_STR);
+			 $stmt->bindParam(":apellido_arq", $datos["ape1"], PDO::PARAM_STR);
+			 $stmt->bindParam(":celular_arq", $datos["tele1"], PDO::PARAM_STR);
+			 $stmt->bindParam(":nombre_obra", $datos["nom2"], PDO::PARAM_STR);
+			 $stmt->bindParam(":apellido_obra", $datos["ape2"], PDO::PARAM_STR);
+			 $stmt->bindParam(":celular_obra", $datos["tele2"], PDO::PARAM_STR);
+			 $stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			 $stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			 $stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			 }
+
+			 elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Dueno') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Profesional')
+			){
+			$stmt->bindParam(":nombre_arq", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			 elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Profesional') &&
+			 ($datos["contacto2"]!= '' && $datos["contacto2"] == 'Maestro')
+			){
+			$stmt->bindParam(":nombre_arq", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $datos["tele2"], PDO::PARAM_STR);
+			}
+
+			elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Maestro') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Profesional')
+			){
+			$stmt->bindParam(":nombre_arq", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $datos["tele1"], PDO::PARAM_STR);
+			}
+
+			elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Dueno') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Maestro')
+		   ){
+		   $stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_obra", $datos["nom1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_obra", $datos["ape1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_obra", $datos["tele1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_maes_obr",$datos["nom2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_maes_obr",$datos["ape2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_maes_obr", $datos["tele2"], PDO::PARAM_STR);
+		   }
+			elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Maestro') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Dueno')
+		   ){
+		   $stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_obra", $datos["nom2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_obra", $datos["ape2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_obra", $datos["tele2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_maes_obr",$datos["nom1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_maes_obr",$datos["ape1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_maes_obr", $datos["tele1"], PDO::PARAM_STR);
+		   }
+
+			elseif($datos["contacto1"]!= '' && $datos["contacto1"] == 'Profesional'){
+			$stmt->bindParam(":nombre_arq", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto1"]!= '' && $datos["contacto1"] == 'Dueno'){
+			$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto1"]!= '' && $datos["contacto1"] =='Maestro'){
+			$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $datos["tele1"], PDO::PARAM_STR);
+			}
+
+			
+		elseif($datos["contacto2"]!= '' && $datos["contacto2"] =='Profesional'){
+			$stmt->bindParam(":nombre_arq", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto2"]!= '' && $datos["contacto2"] =='Dueno'){
+			$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto2"]!= '' && $datos["contacto2"] =='Maestro'){
+				$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":nombre_obra",$vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":nombre_maes_obr", $datos["nom2"], PDO::PARAM_STR);
+				$stmt->bindParam(":apellido_maes_obr", $datos["ape2"], PDO::PARAM_STR);
+				$stmt->bindParam(":celular_maes_obr", $datos["tele2"], PDO::PARAM_STR);
+			}
+			
+
+			if($stmt->execute()){
+
+				$id_cotizacion = 'EXT'.$pdo->lastInsertId();
+
+				$stmt2 = Conexion::conectar()->prepare("INSERT INTO cliente_proforma(id_asesor, ced_cliente, nombre_almacen, cotizacion, fecha_cotizacion, relacionado, UsuIde) 
+				VALUES (:id_asesor,:ced_cliente, 'RECORRIDO', :cotizacion, NOW(), '0', :usu_ide)");
+
+				$propietario='';
+				if ($datos["nom1"]!= null){
+					$propietario = $datos["nom1"].' '.$datos["ape1"];
+				}else if($datos["nom2"]!= null){
+					$propietario = $datos["nom2"].' '.$datos["ape2"];
+				}
 		
+				$stmt2->bindParam(":id_asesor", $datos["id_asesor"], PDO::PARAM_STR);
+				$stmt2->bindParam(":cotizacion", $id_cotizacion, PDO::PARAM_STR);
+				$stmt2->bindParam(":ced_cliente", $propietario, PDO::PARAM_STR);
+				$stmt2->bindParam(":usu_ide", $datos["id_asesor"], PDO::PARAM_STR);
+				$stmt2->execute();
+
+				return "ok";
+
+			}else{
+
+				return "error";
+			
+			}
 		}
 
 		$stmt = null;
 		$stmt2= null;
+		$stmtVal= null;
 
 	}
 
@@ -326,42 +520,222 @@ class ModeloClientes{
 	=============================================*/
 
 	static public function mdlEditarClienteRecorrido($tabla, $datos){
+
 	
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET obra = :obra, calle_principal = :calle_principal, calle_secundaria = :calle_secundaria, sector = :sector, ciudad = :ciudad, observaciones = :observaciones, etapa = :etapa, ubicacion =:ubicacion ,nombre_arq =:nombre_arq, apellido_arq =:apellido_arq, celular_arq = :celular_arq, nombre_obra =:nombre_obra, apellido_obra =:apellido_obra, celular_obra =:celular_obra, nombre_maes_obr =:nombre_maes_obr, apellido_maes_obr =:apellido_maes_obr, celular_maes_obr =:celular_maes_obr WHERE id = :id");
-				
-		$stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
-		$stmt->bindParam(":obra", $datos["obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":calle_principal", $datos["calle_principal"], PDO::PARAM_STR);
-		$stmt->bindParam(":calle_secundaria", $datos["calle_secundaria"], PDO::PARAM_STR);
-		$stmt->bindParam(":sector", $datos["sector"], PDO::PARAM_STR);
-		$stmt->bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
-		$stmt->bindParam(":observaciones", $datos["observacion"], PDO::PARAM_STR);
-		$stmt->bindParam(":etapa", $datos["etapa"], PDO::PARAM_STR);		
-		$stmt->bindParam(":ubicacion", $datos["ubicacion"], PDO::PARAM_STR);
-		$stmt->bindParam(":nombre_arq", $datos["nom_arq"], PDO::PARAM_STR);
-		$stmt->bindParam(":apellido_arq", $datos["ape_arq"], PDO::PARAM_STR);
-		$stmt->bindParam(":celular_arq", $datos["tele_arq"], PDO::PARAM_STR);
-		$stmt->bindParam(":nombre_obra", $datos["nom_obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":apellido_obra", $datos["ape_obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":celular_obra", $datos["tele_obra"], PDO::PARAM_STR);
-		$stmt->bindParam(":nombre_maes_obr", $datos["nom_maes"], PDO::PARAM_STR);
-		$stmt->bindParam(":apellido_maes_obr", $datos["ape_maes"], PDO::PARAM_STR);
-		$stmt->bindParam(":celular_maes_obr", $datos["tele_maes"], PDO::PARAM_STR);
-		
-
-		if($stmt->execute()){
-
-			return "ok";
-
-		}else{
-
-			return "error";
-		
+		if ($datos["tele1"] != ''){
+			
+			$stmtVal = Conexion::conectar()->prepare("SELECT * FROM clientes_duramas WHERE (CliCelular = :celular1 ) and CliCelular != '' ");
+			$stmtVal -> bindParam(":celular1", $datos["tele1"], PDO::PARAM_STR);
+		}
+		if ($datos["tele2"] != ''){
+			
+			$stmtVal = Conexion::conectar()->prepare("SELECT * FROM clientes_duramas WHERE (CliCelular = :celular2 ) and CliCelular != '' ");
+			$stmtVal -> bindParam(":celular2", $datos["tele2"], PDO::PARAM_STR);
 		}
 
-		$stmt = null;
+		if ($datos["tele1"] != '' && $datos["tele2"] != '' ){
+			
+			$stmtVal = Conexion::conectar()->prepare("SELECT * FROM clientes_duramas WHERE CliCelular != '' and (CliCelular =:celular1 or CliCelular =:celular2 ) ");
+			$stmtVal -> bindParam(":celular1", $datos["tele1"], PDO::PARAM_STR);
+			$stmtVal -> bindParam(":celular2", $datos["tele2"], PDO::PARAM_STR);
+		}
+		
+		
 
+		$stmtVal -> execute();
+
+		if ($stmtVal -> fetchAll() != null ){
+			return "ok_valida";
+
+
+		}else{
+	
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET obra = :obra, calle_principal = :calle_principal, calle_secundaria = :calle_secundaria, sector = :sector, ciudad = :ciudad, observaciones = :observaciones, etapa = :etapa, ubicacion =:ubicacion ,contacto1=:contacto1, contacto2=:contacto2, nombre_arq =:nombre_arq, apellido_arq =:apellido_arq, celular_arq = :celular_arq, nombre_obra =:nombre_obra, apellido_obra =:apellido_obra, celular_obra =:celular_obra, nombre_maes_obr =:nombre_maes_obr, apellido_maes_obr =:apellido_maes_obr, celular_maes_obr =:celular_maes_obr WHERE id = :id");
+			$vacio=null;
+
+			$stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);		
+			$stmt->bindParam(":obra", $datos["obra"], PDO::PARAM_STR);
+			$stmt->bindParam(":calle_principal", $datos["callePrincipal"], PDO::PARAM_STR);
+			$stmt->bindParam(":calle_secundaria", $datos["calleSecundaria"], PDO::PARAM_STR);
+			$stmt->bindParam(":sector", $datos["sector"], PDO::PARAM_STR);
+			$stmt->bindParam(":ciudad", $datos["ciudad"], PDO::PARAM_STR);
+			$stmt->bindParam(":observaciones", $datos["observacion"], PDO::PARAM_STR);
+			$stmt->bindParam(":etapa", $datos["etapa"], PDO::PARAM_STR);
+			$stmt->bindParam(":ubicacion", $datos["ubicacion"], PDO::PARAM_STR);
+			$stmt->bindParam(":contacto1", $datos["contacto1"], PDO::PARAM_STR);
+			$stmt->bindParam(":contacto2", $datos["contacto2"], PDO::PARAM_STR);
+
+
+			if(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Profesional') &&
+				($datos["contacto2"]!= '' && $datos["contacto2"] == 'Dueno')
+			 ){
+			 $stmt->bindParam(":nombre_arq", $datos["nom1"], PDO::PARAM_STR);
+			 $stmt->bindParam(":apellido_arq", $datos["ape1"], PDO::PARAM_STR);
+			 $stmt->bindParam(":celular_arq", $datos["tele1"], PDO::PARAM_STR);
+			 $stmt->bindParam(":nombre_obra", $datos["nom2"], PDO::PARAM_STR);
+			 $stmt->bindParam(":apellido_obra", $datos["ape2"], PDO::PARAM_STR);
+			 $stmt->bindParam(":celular_obra", $datos["tele2"], PDO::PARAM_STR);
+			 $stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			 $stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			 $stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			 }
+
+			 elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Dueno') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Profesional')
+			){
+			$stmt->bindParam(":nombre_arq", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			 elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Profesional') &&
+			 ($datos["contacto2"]!= '' && $datos["contacto2"] == 'Maestro')
+			){
+			$stmt->bindParam(":nombre_arq", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $datos["tele2"], PDO::PARAM_STR);
+			}
+
+			elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Maestro') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Profesional')
+			){
+			$stmt->bindParam(":nombre_arq", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $datos["tele1"], PDO::PARAM_STR);
+			}
+
+			elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Dueno') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Maestro')
+		   ){
+		   $stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_obra", $datos["nom1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_obra", $datos["ape1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_obra", $datos["tele1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_maes_obr",$datos["nom2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_maes_obr",$datos["ape2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_maes_obr", $datos["tele2"], PDO::PARAM_STR);
+		   }
+			elseif(($datos["contacto1"]!= '' && $datos["contacto1"] == 'Maestro') &&
+			($datos["contacto2"]!= '' && $datos["contacto2"] == 'Dueno')
+		   ){
+		   $stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_obra", $datos["nom2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_obra", $datos["ape2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_obra", $datos["tele2"], PDO::PARAM_STR);
+		   $stmt->bindParam(":nombre_maes_obr",$datos["nom1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":apellido_maes_obr",$datos["ape1"], PDO::PARAM_STR);
+		   $stmt->bindParam(":celular_maes_obr", $datos["tele1"], PDO::PARAM_STR);
+		   }
+
+			elseif($datos["contacto1"]!= '' && $datos["contacto1"] == 'Profesional'){
+			$stmt->bindParam(":nombre_arq", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto1"]!= '' && $datos["contacto1"] == 'Dueno'){
+			$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $datos["tele1"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto1"]!= '' && $datos["contacto1"] =='Maestro'){
+			$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr", $datos["nom1"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr", $datos["ape1"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $datos["tele1"], PDO::PARAM_STR);
+			}
+
+			
+		elseif($datos["contacto2"]!= '' && $datos["contacto2"] =='Profesional'){
+			$stmt->bindParam(":nombre_arq", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto2"]!= '' && $datos["contacto2"] =='Dueno'){
+			$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_obra", $datos["nom2"], PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_obra", $datos["ape2"], PDO::PARAM_STR);
+			$stmt->bindParam(":celular_obra", $datos["tele2"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":apellido_maes_obr",$vacio, PDO::PARAM_STR);
+			$stmt->bindParam(":celular_maes_obr", $vacio, PDO::PARAM_STR);
+			}
+
+			elseif($datos["contacto2"]!= '' && $datos["contacto2"] =='Maestro'){
+				$stmt->bindParam(":nombre_arq", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":apellido_arq", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":celular_arq", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":nombre_obra",$vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":apellido_obra", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":celular_obra", $vacio, PDO::PARAM_STR);
+				$stmt->bindParam(":nombre_maes_obr", $datos["nom2"], PDO::PARAM_STR);
+				$stmt->bindParam(":apellido_maes_obr", $datos["ape2"], PDO::PARAM_STR);
+				$stmt->bindParam(":celular_maes_obr", $datos["tele2"], PDO::PARAM_STR);
+			}
+
+			if($stmt->execute()){
+
+				return "ok";
+
+			}else{
+
+				return "error";
+			
+			}
+
+			$stmt = null;
+			$stmtVal= null;
+
+		}
 	}
-
 
 }

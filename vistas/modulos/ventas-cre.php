@@ -131,6 +131,7 @@ if($xml){
 
           $respuesta = ControladorVentas::ctrRangoFechasCotizacionCliente($fechaInicial, $fechaFinal, $item, $valor,$valor2);
           $id_actividad= null;
+          $cliente_id=null;
 
           $stmt= Conexion::conectar()->prepare("TRUNCATE TABLE clientes_excluidos");
           $stmt->execute();
@@ -148,16 +149,6 @@ if($xml){
 
                   $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
 
-                  if ($respuestaCliente["nombre"] == "" or $respuestaCliente["nombre"] == null){
-
-                    $stmt=Conexion::conectar()->prepare("INSERT INTO clientes_excluidos(cedula) VALUES (:cedula)");
-
-                    $stmt->bindParam(":cedula", $valorCliente, PDO::PARAM_STR);
-
-                    $stmt->execute();
-                  
-                  }
-
                   $condicion_recorrido =substr($value['cotizacion'],0,3);
                   $idRecorrido=substr($value['cotizacion'],3,strlen($value['cotizacion']));
 
@@ -166,6 +157,16 @@ if($xml){
                     echo '<td>'.$value["ced_cliente"].'</td>';
 
                   }else {
+
+                    if ($respuestaCliente["nombre"] == "" or $respuestaCliente["nombre"] == null){
+
+                      $stmt=Conexion::conectar()->prepare("INSERT INTO clientes_excluidos(cedula) VALUES (:cedula)");
+  
+                      $stmt->bindParam(":cedula", $valorCliente, PDO::PARAM_STR);
+  
+                      $stmt->execute();
+                    
+                    }
 
                     echo '<td>'.$respuestaCliente["nombre"].'</td>';
 
@@ -201,8 +202,6 @@ if($xml){
                         <i class="fa fa-print"></i>PDF
 
                       </button> -->' ;
-                      
-                      $id_actividad= null;
 
                       if($_SESSION["perfil"] == "Vendedor" ){
 
@@ -222,11 +221,9 @@ if($xml){
                           }
     
                         $codigo = $valueCode["codigo"]  + 1;
-
-                        $cliente_id=null;
                           
                         if ($condicion_recorrido == 'EXT'){
-                            $cliente_id= '99';
+                            $cliente_id= '0';
                         }else{
                             $cliente_id=$respuestaCliente["id"];
                         }

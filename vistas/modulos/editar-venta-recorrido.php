@@ -79,6 +79,8 @@
 
                     <input type="hidden" name="idVendedor" value="<?php echo $vendedor["id"]; ?>">
 
+                    <input type="hidden" name="seleccionarCliente" value="<?php echo $cliente["id"]; ?>">
+
                   </div>
 
                 </div> 
@@ -109,8 +111,8 @@
                       <thead>
                         <tr>
                           <th scope="col">Obra</th>
-                          <th scope="col">Calle Principal</th>
-                          <th scope="col">Calle Secundaria</th>
+                          <th scope="col">Nombre Obra</th>
+                          <th scope="col">Direccion</th>
                           <th scope="col">Sector</th>
                           <th scope="col">Ciudad</th>
                           <th scope="col">Arquitecto</th>

@@ -65,12 +65,18 @@ if($_SESSION["perfil"] == "Especial"){
 
                             <th style="width:10px">#</th>
                             <th>Obra</th>
-                            <th>Calle Principal</th>
-                            <th>Ciudad</th>
-                            <th>Etapa</th>
                             <th>Arquitecto</th>
+                            <th>Celular</th>
                             <th>Dueño Obra</th>
+                            <th>Celular</th>
                             <th>Maestro Obra</th>
+                            <th>Celular</th>
+                            <th>Ciudad</th>
+                            <?php
+                            if($_SESSION["perfil"] == "Administrador"){
+                                echo '<th>Asesor</th>';
+                                }
+                            ?>
                             <th>Acciones</th>
 
                         </tr>
@@ -101,19 +107,33 @@ if($_SESSION["perfil"] == "Especial"){
 
                     <td>'.$value["obra"].'</td>
 
-                    <td>'.$value["calle_principal"].'</td>
-
-                    <td>'.$value["ciudad"].'</td>
-
-                    <td>'.$value["etapa"].'</td>
-
-                    <td>'.$value["nombre_arq"].' '.$value["apellido_arq"].'</td>   
+                    <td>'.$value["nombre_arq"].' '.$value["apellido_arq"].'</td>  
+                    
+                    <td>'.$value["celular_arq"].'</td>  
                     
                     <td>'.$value["nombre_obra"].' '.$value["apellido_obra"].'</td>  
-                    
-                    <td>'.$value["nombre_maes_obr"].' '.$value["apellido_maes_obr"].'</td>  
 
-                    <td>
+                    <td>'.$value["celular_obra"].'</td> 
+                    
+                    <td>'.$value["nombre_maes_obr"].' '.$value["apellido_maes_obr"].'</td>
+
+                    <td>'.$value["celular_maes_obr"].'</td>
+                    
+                    <td>'.$value["ciudad"].'</td>';
+
+
+                    if($_SESSION["perfil"] == "Administrador"){
+                        $tablaVendedor = "usuarios";
+			            $item = "usuario";
+			            $valor = $value["asesor"];
+
+			            $traerVendedor = ModeloUsuarios::mdlMostrarUsuarios($tablaVendedor, $item, $valor);
+
+                        echo '<td>'.$traerVendedor["nombre"].'</td>';
+                    }
+
+
+                    echo ' <td>
 
                       <div class="btn-group">
                           
@@ -185,9 +205,14 @@ MODAL AGREGAR CLIENTE
                             <div class="input-group">
 
                                 <span class="input-group-addon"><i class="fa fa-check-circle-o"></i></span>
-
-                                <input type="text" class="form-control input-lg" name="nuevoObra"
-                                    placeholder="Obra" required>
+                                
+                                <select name="nuevoObra" class="form-control input-lg" required>
+                                    <option selected value="">--Obra--</option>
+                                    <option value="Casa">Casa</option>
+                                    <option value="Edificio">Edificio</option>
+                                    <option value="Urbanizacion">Urbanizacion</option>
+                                    <option value="Local Comercial">Local Comercial</option>
+                                </select>
 
                             </div>
 
@@ -202,7 +227,7 @@ MODAL AGREGAR CLIENTE
                                 <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
 
                                 <input type="text" class="form-control input-lg" name="nuevoCallePrincipal"
-                                    placeholder="Ingresar Calle Principal" required>
+                                    placeholder="Ingresar Nombre Obra">
 
                             </div>
 
@@ -218,7 +243,7 @@ MODAL AGREGAR CLIENTE
                                 <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
 
                                 <input type="text" class="form-control input-lg" name="nuevoCalleSecundaria"
-                                    placeholder="Ingresar Calle Secundaria" required>
+                                    placeholder="Ingresar Direccion" required>
 
                             </div>
 
@@ -248,8 +273,18 @@ MODAL AGREGAR CLIENTE
 
                                 <span class="input-group-addon"><i class="fa fa-globe"></i></span>
 
-                                <input type="text" class="form-control input-lg" name="nuevaCiudad"
-                                    placeholder="Ingresar Ciudad" required>
+                                <select name="nuevaCiudad" class="form-control input-lg" required>
+                                    <option selected value="">--Ingresar Ciudad--</option>
+                                    <option value="Cuenca">Cuenca</option>
+                                    <option value="Azogues">Azogues</option>
+                                    <option value="Gualaceo">Gualaceo</option>
+                                    <option value="Paute">Paute</option>
+                                    <option value="Chordeleg">Chordeleg</option>
+                                    <option value="Loja">Loja</option>
+                                    <option value="Canar">Cañar</option>
+                                    <option value="Machala">Machala</option>
+                                    <option value="Otros">Otros</option>
+                                </select>
 
                             </div>
 
@@ -279,7 +314,7 @@ MODAL AGREGAR CLIENTE
 
                                 <span class="input-group-addon"><i class="fa fa-check"></i></span>
 
-                                <select name="etapa" class="form-control input-lg">
+                                <select name="etapa" class="form-control input-lg" required>
                                     <option selected value="">--ETAPA--</option>
                                     <option value="Cimientos">Cimientos</option>
                                     <option value="Obra Gris">Obra Gris</option>
@@ -307,7 +342,26 @@ MODAL AGREGAR CLIENTE
 
                         <br>
 
-                       <!-- ENTRADA PARA NOMBRE DEL ARQ -->
+                        <!-- ENTRADA PARA CONTACTO1 -->
+
+                        <div class="form-group">
+
+                        <div class="input-group">
+
+                            <span class="input-group-addon"><i class="fa fa-check"></i></span>
+
+                            <select name="contacto1" class="form-control input-lg">
+                                <option selected value="">--CONTACTO--</option>
+                                <option value="Profesional">Profesional</option>
+                                <option value="Dueno">Dueño</option>
+                                <option value="Maestro">Maestro</option>
+                            </select>
+
+                        </div>
+
+                        </div>
+
+                       <!-- ENTRADA PARA NOMBRE DEL CONTACTO1 -->
 
                         <div class="form-group">
 
@@ -315,14 +369,14 @@ MODAL AGREGAR CLIENTE
 
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                                <input type="text" class="form-control input-lg" name="nuevaNomArq"
-                                    placeholder="Ingresar Nombre Arquitecto">
+                                <input type="text" class="form-control input-lg" name="nuevaNom1"
+                                    placeholder="Ingresar Nombre">
 
                             </div>
 
                         </div>
 
-                      <!-- ENTRADA PARA APELLIDO DEL ARQ -->
+                      <!-- ENTRADA PARA APELLIDO DEL CONTACTO1 -->
 
                         <div class="form-group">
 
@@ -330,14 +384,14 @@ MODAL AGREGAR CLIENTE
 
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                                <input type="text" class="form-control input-lg" name="nuevaApeArq"
-                                    placeholder="Ingresar Apellido Arquitecto">
+                                <input type="text" class="form-control input-lg" name="nuevaApe1"
+                                    placeholder="Ingresar Apellido">
 
                             </div>
 
                         </div>
 
-                     <!-- ENTRADA PARA EL NUMERO TELF ARQ -->
+                     <!-- ENTRADA PARA EL NUMERO TELF CONTACTO1 -->
 
                         <div class="form-group">
 
@@ -345,8 +399,8 @@ MODAL AGREGAR CLIENTE
 
                                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-                                <input type="text" class="form-control input-lg" name="nuevoTelefonoArq"
-                                    placeholder="Ingresar Nro Celular Arq." data-inputmask="'mask':'(999) 999-9999'" data-mask>
+                                <input type="text" class="form-control input-lg" name="nuevoTelefono1"
+                                    placeholder="Ingresar Nro Celular.">
 
 
                             </div>
@@ -355,7 +409,27 @@ MODAL AGREGAR CLIENTE
 
                         <br>
 
-                         <!-- ENTRADA PARA NOMBRE DEL DUENO OBRA -->
+
+                        <!-- ENTRADA PARA CONTACTO2 -->
+
+                        <div class="form-group">
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon"><i class="fa fa-check"></i></span>
+
+                                <select name="contacto2" class="form-control input-lg">
+                                    <option selected value="">--CONTACTO--</option>
+                                    <option value="Profesional">Profesional</option>
+                                    <option value="Dueno">Dueño</option>
+                                    <option value="Maestro">Maestro</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                         <!-- ENTRADA PARA NOMBRE DEL CONTACTO2 -->
 
                          <div class="form-group">
 
@@ -363,14 +437,14 @@ MODAL AGREGAR CLIENTE
 
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                                <input type="text" class="form-control input-lg" name="nuevaNomObra"
-                                    placeholder="Ingresar Nombre Dueño Obra">
+                                <input type="text" class="form-control input-lg" name="nuevaNom2"
+                                    placeholder="Ingresar Nombre">
 
                             </div>
 
                           </div>
 
-                            <!-- ENTRADA PARA APELLIDO DEL DUENO OBRA -->
+                            <!-- ENTRADA PARA APELLIDO DEL CONTACTO2 -->
 
                             <div class="form-group">
 
@@ -378,14 +452,14 @@ MODAL AGREGAR CLIENTE
 
                                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                                    <input type="text" class="form-control input-lg" name="nuevaApeObra"
-                                        placeholder="Ingresar Apellido Dueño Obra">
+                                    <input type="text" class="form-control input-lg" name="nuevaApe2"
+                                        placeholder="Ingresar Apellido">
 
                                 </div>
 
                             </div>
 
-                            <!-- ENTRADA PARA EL NUMERO TELF DUENO OBRA -->
+                            <!-- ENTRADA PARA EL NUMERO TELF CONTACTO2 -->
 
                             <div class="form-group">
 
@@ -393,59 +467,12 @@ MODAL AGREGAR CLIENTE
 
                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-                                    <input type="text" class="form-control input-lg" name="nuevoTelefonoObra"
-                                        placeholder="Ingresar Nro Celular Dueño Obra" data-inputmask="'mask':'(999) 999-9999'" data-mask>
+                                    <input type="text" class="form-control input-lg" name="nuevoTelefono2"
+                                        placeholder="Ingresar Nro Celular">
 
                                 </div>
 
                             </div>
-                     <br>
-
-                               <!-- ENTRADA PARA NOMBRE DEL MAESTRO OBRA -->
-
-                                <div class="form-group">
-
-                                    <div class="input-group">
-
-                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-
-                                        <input type="text" class="form-control input-lg" name="nuevaNomMaes"
-                                            placeholder="Ingresar Maestro Obra">
-
-                                    </div>
-
-                                </div>
-
-                                <!-- ENTRADA PARA APELLIDO DEL MAESTRO OBRA -->
-
-                                <div class="form-group">
-
-                                    <div class="input-group">
-
-                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-
-                                        <input type="text" class="form-control input-lg" name="nuevaApeMaes"
-                                            placeholder="Ingresar Apellido Maestro Obra">
-
-                                    </div>
-
-                                </div>
-
-                                <!-- ENTRADA PARA EL NUMERO TELF MAESTRO OBRA -->
-
-                                <div class="form-group">
-
-                                    <div class="input-group">
-
-                                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-
-                                        <input type="text" class="form-control input-lg" name="nuevoTelefonoMaes"
-                                            placeholder="Ingresar Nro Celular Maestro Obra" data-inputmask="'mask':'(999) 999-9999'" data-mask>
-
-                                    </div>
-
-                                </div>
-
                     </div>
 
                 </div>
@@ -489,7 +516,7 @@ MODAL EDITAR CLIENTE
 
             <form role="form" method="post">
 
-                <!--=====================================
+        <!--=====================================
         CABEZA DEL MODAL
         ======================================-->
 
@@ -518,13 +545,20 @@ MODAL EDITAR CLIENTE
                             <input type="hidden" id="idCliente" name="idCliente">
 
                             <span class="input-group-addon"><i class="fa fa-check-circle-o"></i></span> 
-                            <input type="text" class="form-control input-lg" name="editarObra" id="editarObra">
+        
+                            <select name="editarObra" id="editarObra" class="form-control input-lg" required>
+                            <option selected value="">--Obra--</option>
+                            <option value="Casa">Casa</option>
+                            <option value="Edificio">Edificio</option>
+                            <option value="Urbanizacion">Urbanizacion</option>
+                            <option value="Local Comercial">Local Comercial</option>
+                        </select>
 
                             </div>
 
                         </div>
 
-                <!-- ENTRADA PARA LA CALLE PRINCIPAL -->
+                <!-- ENTRADA NOMBRE OBRA -->
 
                    <div class="form-group">
 
@@ -533,14 +567,14 @@ MODAL EDITAR CLIENTE
                         <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
 
                         <input type="text" class="form-control input-lg" name="editarCallePrincipal" id="editarCallePrincipal"
-                            placeholder="Ingresar Calle Principal" required>
+                            placeholder="Ingresar Nombre Obra">
 
                     </div>
 
                     </div>
 
 
-                    <!-- ENTRADA PARA LA CALLE SECUNDARIA -->
+                    <!-- ENTRADA PARA LA DIRECCION -->
 
                     <div class="form-group">
 
@@ -549,7 +583,7 @@ MODAL EDITAR CLIENTE
                         <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
 
                         <input type="text" class="form-control input-lg" name="editarCalleSecundaria" id="editarCalleSecundaria"
-                            placeholder="Ingresar Calle Secundaria" required>
+                            placeholder="Ingresar Direccion" required>
 
                     </div>
 
@@ -579,8 +613,18 @@ MODAL EDITAR CLIENTE
 
                         <span class="input-group-addon"><i class="fa fa-globe"></i></span>
 
-                        <input type="text" class="form-control input-lg" name="editarCiudad" id="editarCiudad"
-                            placeholder="Ingresar Ciudad" required>
+                        <select name="editarCiudad" id="editarCiudad" class="form-control input-lg" required>
+                                <option selected value="">--Ingresar Ciudad--</option>
+                                <option value="Cuenca">Cuenca</option>
+                                <option value="Azogues">Azogues</option>
+                                <option value="Gualaceo">Gualaceo</option>
+                                <option value="Paute">Paute</option>
+                                <option value="Chordeleg">Chordeleg</option>
+                                <option value="Loja">Loja</option>
+                                <option value="Canar">Cañar</option>
+                                <option value="Machala">Machala</option>
+                                <option value="Otros">Otros</option>
+                        </select>
 
                     </div>
 
@@ -610,7 +654,7 @@ MODAL EDITAR CLIENTE
 
                         <span class="input-group-addon"><i class="fa fa-check"></i></span>
 
-                        <select name="editarEtapa" id="editarEtapa" class="form-control input-lg">
+                        <select name="editarEtapa" id="editarEtapa" class="form-control input-lg" required>
                             <option selected value="">--ETAPA--</option>
                             <option value="Cimientos">Cimientos</option>
                             <option value="Obra Gris">Obra Gris</option>
@@ -638,7 +682,26 @@ MODAL EDITAR CLIENTE
 
                     <br>
 
-                    <!-- ENTRADA PARA NOMBRE DEL ARQ -->
+                    <!-- ENTRADA PARA ESCOGER CONTACTO1 -->
+
+                    <div class="form-group">
+
+                    <div class="input-group">
+
+                        <span class="input-group-addon"><i class="fa fa-check"></i></span>
+
+                        <select name="editarcontacto1" id="editarcontacto1" class="form-control input-lg">
+                            <option selected value="">--CONTACTO--</option>
+                            <option value="Profesional">Profesional</option>
+                            <option value="Dueno">Dueño</option>
+                            <option value="Maestro">Maestro</option>
+                        </select>
+
+                    </div>
+
+                    </div>
+
+                    <!-- ENTRADA PARA NOMBRE DEL CONTACTO1 -->
 
                     <div class="form-group">
 
@@ -646,14 +709,14 @@ MODAL EDITAR CLIENTE
 
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                        <input type="text" class="form-control input-lg" name="editarNomArq" id="editarNomArq"
-                            placeholder="Ingresar Nombre Arquitecto">
+                        <input type="text" class="form-control input-lg" name="editarNom1" id="editarNom1"
+                            placeholder="Ingresar Nombre">
 
                     </div>
 
                     </div>
 
-                    <!-- ENTRADA PARA APELLIDO DEL ARQ -->
+                    <!-- ENTRADA PARA APELLIDO DEL CONTACTO1 -->
 
                     <div class="form-group">
 
@@ -661,14 +724,14 @@ MODAL EDITAR CLIENTE
 
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                        <input type="text" class="form-control input-lg" name="editarApeArq" id="editarApeArq"
-                            placeholder="Ingresar Apellido Arquitecto">
+                        <input type="text" class="form-control input-lg" name="editarApe1" id="editarApe1"
+                            placeholder="Ingresar Apellido">
 
                     </div>
 
                     </div>
 
-                    <!-- ENTRADA PARA EL NUMERO TELF ARQ -->
+                    <!-- ENTRADA PARA EL NUMERO TELF1 -->
 
                     <div class="form-group">
 
@@ -676,8 +739,8 @@ MODAL EDITAR CLIENTE
 
                         <span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-                        <input type="text" class="form-control input-lg" name="editarTelefonoArq" id="editarTelefonoArq"
-                            placeholder="Ingresar Nro Celular Arq." data-inputmask="'mask':'(999) 999-9999'" data-mask>
+                        <input type="text" class="form-control input-lg" name="editarTelefono1" id="editarTelefono1"
+                            placeholder="Ingresar Nro Celular.">
 
 
                     </div>
@@ -686,7 +749,26 @@ MODAL EDITAR CLIENTE
 
                     <br>
 
-                    <!-- ENTRADA PARA NOMBRE DEL DUENO OBRA -->
+                <!-- ENTRADA PARA ESCOGER CONTACTO2 -->
+
+                <div class="form-group">
+
+                    <div class="input-group">
+
+                    <span class="input-group-addon"><i class="fa fa-check"></i></span>
+
+                    <select name="editarcontacto2" id="editarcontacto2" class="form-control input-lg">
+                        <option selected value="">--CONTACTO--</option>
+                        <option value="Profesional">Profesional</option>
+                        <option value="Dueno">Dueño</option>
+                        <option value="Maestro">Maestro</option>
+                    </select>
+
+                    </div>
+
+                </div>
+
+                    <!-- ENTRADA PARA NOMBRE DEL CONTACTO2 -->
 
                     <div class="form-group">
 
@@ -694,14 +776,14 @@ MODAL EDITAR CLIENTE
 
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                        <input type="text" class="form-control input-lg" name="editarNomObra" id="editarNomObra"
-                            placeholder="Ingresar Nombre Dueño Obra">
+                        <input type="text" class="form-control input-lg" name="editarNom2" id="editarNom2"
+                            placeholder="Ingresar Nombre">
 
                     </div>
 
                     </div>
 
-                    <!-- ENTRADA PARA APELLIDO DEL DUENO OBRA -->
+                    <!-- ENTRADA PARA APELLIDO DEL CONTACTO2 -->
 
                     <div class="form-group">
 
@@ -709,14 +791,14 @@ MODAL EDITAR CLIENTE
 
                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                            <input type="text" class="form-control input-lg" name="editarApeObra" id="editarApeObra"
-                                placeholder="Ingresar Apellido Dueño Obra">
+                            <input type="text" class="form-control input-lg" name="editarApe2" id="editarApe2"
+                                placeholder="Ingresar Apellido">
 
                         </div>
 
                     </div>
 
-                    <!-- ENTRADA PARA EL NUMERO TELF DUENO OBRA -->
+                    <!-- ENTRADA PARA EL NUMERO DEL CONTACTO2 -->
 
                     <div class="form-group">
 
@@ -724,61 +806,12 @@ MODAL EDITAR CLIENTE
 
                             <span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-                            <input type="text" class="form-control input-lg" name="editarTelefonoObra" id="editarTelefonoObra"
-                                placeholder="Ingresar Nro Celular Dueño Obra" data-inputmask="'mask':'(999) 999-9999'" data-mask>
+                            <input type="text" class="form-control input-lg" name="editarTelefono2" id="editarTelefono2"
+                                placeholder="Ingresar Nro Celular">
 
                         </div>
 
                     </div>
-                    <br>
-
-                    <!-- ENTRADA PARA NOMBRE DEL MAESTRO OBRA -->
-
-                        <div class="form-group">
-
-                            <div class="input-group">
-
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-
-                                <input type="text" class="form-control input-lg" name="editarNomMaes" id="editarNomMaes"
-                                    placeholder="Ingresar Maestro Obra">
-
-                            </div>
-
-                        </div>
-
-                        <!-- ENTRADA PARA APELLIDO DEL MAESTRO OBRA -->
-
-                        <div class="form-group">
-
-                            <div class="input-group">
-
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-
-                                <input type="text" class="form-control input-lg" name="editarApeMaes" id="editarApeMaes"
-                                    placeholder="Ingresar Apellido Maestro Obra">
-
-                            </div>
-
-                        </div>
-
-                        <!-- ENTRADA PARA EL NUMERO TELF MAESTRO OBRA -->
-
-                        <div class="form-group">
-
-                            <div class="input-group">
-
-                                <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-
-                                <input type="text" class="form-control input-lg" name="editarTelefonoMaes"  id="editarTelefonoMaes"
-
-                                    placeholder="Ingresar Nro Celular Maestro Obra" data-inputmask="'mask':'(999) 999-9999'" data-mask>
-
-                            </div>
-
-                        </div>
-
-
 
                     </div>
 

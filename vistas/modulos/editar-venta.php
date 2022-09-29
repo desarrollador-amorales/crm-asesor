@@ -383,7 +383,7 @@ MODAL HISTORIAL COTIZACION
             $ventaHis = ControladorVentas::ctrMostrarVentas($itemHis, $valorHis);
 
           //Eliminar lo datos del historial            
-              $stmt= Conexion::conectar()->prepare("DELETE FROM historial_proforma  WHERE id_almacen = $idAlmacen and cotizacion =$numeroCotizacion");
+              $stmt= Conexion::conectar()->prepare("DELETE FROM historial_proforma  WHERE id_almacen = $idAlmacen and cotizacion =$numeroCotizacion and eliminar = 1");
               $stmt->execute();
             
               $listaProducto = json_decode($ventaHis["productos"], true);

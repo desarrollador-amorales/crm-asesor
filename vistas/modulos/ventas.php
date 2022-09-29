@@ -167,9 +167,12 @@ if($xml){
                   $valorCliente = $value["ced_cliente"];
 
                   $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
-
+                  
                   $condicion_recorrido =substr($value['cotizacion'],0,3);
                   $idRecorrido=substr($value['cotizacion'],3,strlen($value['cotizacion']));
+                  $item='id';
+
+                  $respuestaRecorrido= ControladorClientes::ctrMostrarClientesRecorrido($item,$idRecorrido);
 
                   if ($condicion_recorrido == 'EXT'){
 
@@ -191,7 +194,19 @@ if($xml){
 
                   if($_SESSION["perfil"] == "Vendedor"){
 
-                    echo '<td>'.$respuestaCliente["telefono"].'</td>';
+                    if ($condicion_recorrido == 'EXT'){
+
+                      if ($respuestaRecorrido["celular_arq"] != null){
+                        echo '<td>'.$respuestaRecorrido["celular_arq"].'</td>';
+                      }else if ($respuestaRecorrido["celular_obra"] != null){
+                        echo '<td>'.$respuestaRecorrido["celular_obra"].'</td>';
+                      }else if ($respuestaRecorrido["celular_maes_obr"] != null){
+                        echo '<td>'.$respuestaRecorrido["celular_maes_obr"].'</td>';
+                      }                           
+                      
+                    }else{
+                      echo '<td>'.$respuestaCliente["telefono"].'</td>';
+                    }
  
                    }
 

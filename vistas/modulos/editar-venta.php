@@ -47,12 +47,15 @@
                     $valor2= $_GET["actividadRealizada"];
                     $numeroCotizacion= $_GET["numeroCotizacion"];
                     $idAlmacen= $_GET["idAlmacen"];
+                    $tabla="cliente_proforma";
+                    $numCotizacion="cotizacion";
 
                     $venta = ControladorVentas::ctrMostrarVentas($item, $valor);
                     $historialCotizacionRelacionada = ControladorVentas::ctrMostrarHistorialCotizacionRelacionada($numeroCotizacion,$idAlmacen);
                     $historialCotizacion = ControladorVentas::ctrMostrarHistorialCotizacion($numeroCotizacion,$idAlmacen);
                     $detalleCotizacion = ControladorVentas::ctrMostrarDetalleCotizacion($numeroCotizacion,$idAlmacen);
-
+                    $cotizacion = ModeloVentas::mdlMostrarVentasLeerDatos($tabla,$numCotizacion,$numeroCotizacion,$idAlmacen);
+                    
 
                     $itemUsuario = "id";
                     $valorUsuario = $venta["id_vendedor"];
@@ -132,6 +135,8 @@
                     <!-- <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalAgregarCliente" data-dismiss="modal">Agregar cliente</button></span> -->
                     <input type="text" class="form-control" id="numeroCotizacion" name="numeroCotizacion" value="<?php echo $numeroCotizacion ?>" readonly>
                     <input type="text" class="form-control" id="numeroCelular" name="numeroCelular" value="<?php echo $cliente["telefono"] ?>" readonly>
+                    <input type="text" class="form-control" id="fechaCotizacion" name="fechaCotizacion" value="<?php echo $cotizacion["fecha_cotizacion"] ?>" readonly>
+                    
                   
                   </div>
 

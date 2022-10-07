@@ -136,7 +136,6 @@
                     <input type="text" class="form-control" id="numeroCotizacion" name="numeroCotizacion" value="<?php echo $numeroCotizacion ?>" readonly>
                     <input type="text" class="form-control" id="numeroCelular" name="numeroCelular" value="<?php echo $cliente["telefono"] ?>" readonly>
                     <input type="text" class="form-control" id="fechaCotizacion" name="fechaCotizacion" value="<?php echo $cotizacion["fecha_cotizacion"] ?>" readonly>
-                    
                   
                   </div>
 

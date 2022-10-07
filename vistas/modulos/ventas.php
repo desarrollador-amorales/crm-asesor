@@ -202,6 +202,8 @@ if($xml){
                         echo '<td>'.$respuestaRecorrido["celular_obra"].'</td>';
                       }else if ($respuestaRecorrido["celular_maes_obr"] != null){
                         echo '<td>'.$respuestaRecorrido["celular_maes_obr"].'</td>';
+                      }else{
+                        echo '<td>S/N</td>';
                       }                           
                       
                     }else{

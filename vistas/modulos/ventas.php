@@ -12,16 +12,6 @@ if($_SESSION["perfil"] == "Especial"){
 
 }
 
-$xml = ControladorVentas::ctrDescargarXML();
-
-if($xml){
-
-  rename($_GET["xml"].".xml", "xml/".$_GET["xml"].".xml");
-
-  echo '<a class="btn btn-block btn-success abrirXML" archivo="xml/'.$_GET["xml"].'.xml" href="ventas">Se ha creado correctamente el archivo XML <span class="fa fa-times pull-right"></span></a>';
-
-}
-
 ?>
 <div class="content-wrapper">
 
@@ -73,7 +63,7 @@ if($xml){
 
          </button>
 
-      </div>
+        </div>
 
       <div class="box-body">
         
@@ -88,7 +78,7 @@ if($xml){
            <th>Cliente</th>
            <th>Almacen</th>
            <?php
-            if($_SESSION["perfil"] == "Administrador"){
+            if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
               echo '<th>Asesor</th>';
             }
            ?>
@@ -99,6 +89,7 @@ if($xml){
            ?>
            <th>Fecha Seguimiento</th>
            <th>Observacion</th>
+           <th>Fecha Cotizacion</th>
            <th>Acciones</th>
 
          </tr> 
@@ -123,7 +114,7 @@ if($xml){
 
           $valor2= 1;
 
-          if($_SESSION["perfil"] == "Administrador"){
+          if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
             $item = null;
             $valor = null;
             
@@ -161,7 +152,7 @@ if($xml){
 
                   <td>'.($key1+1).'</td>
 
-                  <td class="td_cotizacion">'.$value["cotizacion"].'</td>';
+                  <td>'.$value["cotizacion"].'</td>';
 
                   $itemCliente = "cedula";
                   $valorCliente = $value["ced_cliente"];
@@ -186,7 +177,7 @@ if($xml){
 
                   echo '<td>'.$value["nombre_almacen"].'</td>';
 
-                  if($_SESSION["perfil"] == "Administrador"){
+                  if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
 
                    echo '<td>'.$value["nombre"].'</td>';
 
@@ -216,6 +207,8 @@ if($xml){
 
                   <td>'.$observacion.'</td>
 
+                  <td>'.$value["fecha_cotizacion"].'</td>
+
                   <td>
 
                     <div class="btn-group">
@@ -238,7 +231,11 @@ if($xml){
 
                         if ($condicion_recorrido == 'EXT'){
 
+                          $recorridoAlm= "'EXT'";
+
                           echo '<button class="btn btn-warning btnEditarRecorrido" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idRecorrido="'.$idRecorrido.'"><i class="fa fa-pencil"></i></button>';
+
+                          echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$recorridoAlm.'"></i> Relacionar</button></span>';                   
 
                         }else{
 
@@ -251,7 +248,7 @@ if($xml){
                       }
 
 
-                      if($_SESSION["perfil"] == "Administrador" ){
+                      if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
 
                         if ($condicion_recorrido == 'EXT'){
 
@@ -259,11 +256,19 @@ if($xml){
 
                         }else{
 
-                        echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
+                          if($_SESSION["perfil"] == "Supervisor"){
+                            
+                            echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>';    
+                            
+                          }else{
 
-                        <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
+                            echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
+
+                            <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
 
                           }
+
+                        }
                       }
 
                     echo '</div>  

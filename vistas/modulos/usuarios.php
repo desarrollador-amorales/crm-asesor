@@ -1,6 +1,6 @@
 <?php
 
-if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
+if($_SESSION["perfil"] == "Supervisor" || $_SESSION["perfil"] == "Vendedor"){
 
   echo '<script>
 
@@ -227,7 +227,7 @@ MODAL AGREGAR USUARIO
 
                   <option value="Administrador">Administrador</option>
 
-                  <option value="Especial">Especial</option>
+                  <option value="Supervisor">Supervisor</option>
 
                   <option value="Vendedor">Vendedor</option>
 
@@ -253,7 +253,11 @@ MODAL AGREGAR USUARIO
 
                   <option value="Ambato">Ambato</option>
 
-                  <option value="Quito">Quito</option>
+                  <option value="Quito-6 Diciembre">Quito-6 Diciembre</option>
+
+                  <option value="Quito-Cumbaya">Quito-Cumbaya</option>
+
+                  <option value="Quito-Sangolqui">Quito-Sangolqui</option>
 
                   <option value="Guayaquil">Guayaquil</option>
 
@@ -398,7 +402,7 @@ MODAL EDITAR USUARIO
 
                   <option value="Administrador">Administrador</option>
 
-                  <option value="Especial">Especial</option>
+                  <option value="Supervisor">Supervisor</option>
 
                   <option value="Vendedor">Vendedor</option>
 
@@ -425,7 +429,11 @@ MODAL EDITAR USUARIO
 
                   <option value="Ambato">Ambato</option>
 
-                  <option value="Quito">Quito</option>
+                  <option value="Quito-6 Diciembre">Quito-6 Diciembre</option>
+
+                  <option value="Quito-Cumbaya">Quito-Cumbaya</option>
+
+                  <option value="Quito-Sangolqui">Quito-Sangolqui</option>
 
                   <option value="Guayaquil">Guayaquil</option>
 

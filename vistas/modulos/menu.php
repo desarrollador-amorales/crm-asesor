@@ -32,7 +32,7 @@
 
 		}
 
-		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Especial"){
+		if($_SESSION["perfil"] == "Administrador"){
 
 			echo '<li>
 
@@ -58,7 +58,7 @@
 
 		}
 
-		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor"){
+		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor" || $_SESSION["perfil"] == "Supervisor" ){
 
 			echo '<li>
 
@@ -89,7 +89,7 @@
 
 		}
 
-		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor"){
+		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor" || $_SESSION["perfil"] == "Supervisor"){
 
 			echo '<li class="treeview">
 
@@ -153,7 +153,7 @@
 
 					</li>';
 
-					if($_SESSION["perfil"] == "Administrador"){
+					if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
 
 					echo '<li>
 

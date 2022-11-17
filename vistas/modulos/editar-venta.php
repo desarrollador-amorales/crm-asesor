@@ -41,6 +41,7 @@
 
                 <?php
                     $condition = "cotizacion";
+                    $ubicacion= $_SESSION["ubicacion"];
 
                     $item = "id";
                     $valor = $_GET["idVenta"];
@@ -433,6 +434,45 @@ MODAL HISTORIAL COTIZACION
                   $stmt->bindParam(":cotizacion_relacionada", $value["secundaria"], PDO::PARAM_STR);
                   $stmt->bindParam(":motivo_relacion", $value["motivo_relacion"], PDO::PARAM_STR);
                   $stmt->execute();
+
+                  // Hisotorial de Cotizacion Relacionada o Secundaria
+                  $ventaHisCotizacionRelacionada = ControladorVentas::ctrMostrarVentas($itemHis, $value["id_actividad"]);
+                  $listaProductoRelacionado = json_decode($ventaHisCotizacionRelacionada["productos"], true);
+
+                  foreach ($listaProductoRelacionado as $key => $valueProRelacionado) {
+
+                    $stmtRelacionado=Conexion::conectar()->prepare("INSERT INTO historial_proforma
+                    (id_almacen, cotizacion, ced_cliente, fecha, cotizacion_relacionada, origen_negociacion, cliente_compartido, estado_cliente, visita_almacen, motivo_cliente, fecha_seguimiento, valor_factura, observacion) 
+                    VALUES 
+                    (:id_almacen, :cotizacion, :ced_cliente, :fecha, :cotizacion_relacionada, :origen_negociacion, :cliente_compartido, :estado_cliente, :visita_almacen, :motivo_cliente, :fecha_seguimiento, :valor_factura, :observacion)");
+
+                    $condicion_recorrido =substr($value['secundaria'],0,3);
+    
+                    $stmtRelacionado->bindParam(":id_almacen", $idAlmacen, PDO::PARAM_STR);
+                    $stmtRelacionado->bindParam(":cotizacion", $numeroCotizacion, PDO::PARAM_STR);
+                    $stmtRelacionado->bindParam(":ced_cliente", $cliente["cedula"], PDO::PARAM_STR);
+                    $stmtRelacionado->bindParam(":fecha", $valueProRelacionado["fecha"]);
+                    $stmtRelacionado->bindParam(":cotizacion_relacionada", $value["secundaria"], PDO::PARAM_STR);
+                    $stmtRelacionado->bindParam(":origen_negociacion", $valueProRelacionado["tipo_cliente"], PDO::PARAM_STR);
+                    $valorCliCompartido = $valueProRelacionado["cliente_compartido"] == $comparaClienteCompartido ? "":$valueProRelacionado["cliente_compartido"];
+                    $stmtRelacionado->bindParam(":cliente_compartido",$valorCliCompartido , PDO::PARAM_STR);
+
+                    if ($condicion_recorrido == 'EXT'){
+                      $stmtRelacionado->bindParam(":estado_cliente", $valueProRelacionado["estado_recorrido"], PDO::PARAM_STR);  
+                    }else{
+                      $stmtRelacionado->bindParam(":estado_cliente", $valueProRelacionado["estado_cliente"], PDO::PARAM_STR);
+                    }
+                    
+                    $stmtRelacionado->bindParam(":visita_almacen", $valueProRelacionado["visita_almacen"], PDO::PARAM_STR);
+                    $valorMotivoCliente = $valueProRelacionado["motivo_cliente"] == $comparaMotivoCliente ? "":$valueProRelacionado["motivo_cliente"];
+                    $stmtRelacionado->bindParam(":motivo_cliente", $valorMotivoCliente, PDO::PARAM_STR);
+                    $stmtRelacionado->bindParam(":fecha_seguimiento", $valueProRelacionado["fecha_seguimiento"]);
+                    $stmtRelacionado->bindParam(":valor_factura", $valueProRelacionado["valor_factura"]);        
+                    $stmtRelacionado->bindParam(":observacion", $valueProRelacionado["observacion"], PDO::PARAM_STR);
+                    $stmtRelacionado->execute();
+                  
+                  }
+
 
               }
 

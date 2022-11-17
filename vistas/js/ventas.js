@@ -219,6 +219,86 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
         processData: false,
         dataType: "json",
         success: function(respuesta) {
+            cuenca = '';
+            ambato = '';
+            quito6 = '';
+            quitoCumbaya = '';
+            quitoSangolqui = '';
+
+            if (ubicacion == "Cuenca") {
+
+                cuenca =
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Adrián Rios">Adrián Ríos</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Janneth Luna">Janneth Luna</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Marcelo Vásquez">Marcelo Vásquez</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Juan Nieto">Juan Nieto</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Karla Saldana">Karla Saldaña</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Belen Morales">Belen Morales</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Alice Minchalo">Alice Minchalo</option>';
+            }
+
+            if (ubicacion == "Ambato") {
+
+                ambato =
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Jazmina Santamaria">Jazmina Santamaria</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Gissel Castro">Gissel Castro</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Fernando Naranjo">Fernando Naranjo</option>';
+
+            }
+
+            if (ubicacion == "Quito-6 Diciembre") {
+
+                quito6 =
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Luisa Jama">Luisa Jama</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Paola Haro">Paola Haro</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Eunice Bermudez">Eunice Bermudez</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Ana Bonilla">Ana Bonilla</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Damaris Vera">Damaris Vera</option>';
+
+            }
+
+            if (ubicacion == "Quito-Cumbaya") {
+
+                quitoCumbaya =
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Stefanie Carrillo">Stefanie Carrillo</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Irianne Nieves">Irianne Nieves</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Samira Lopez">Samira Lopez</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Mikaela Olmedo">Mikaela Olmedo</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Janneth Bernal">Janneth Bernal</option>';
+
+            }
+
+            if (ubicacion == "Quito-Sangolqui") {
+
+                quitoSangolqui =
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Patricia Hinojosa">Patricia Hinojosa</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Dalila Lema">Dalila Lema</option>' +
+
+                    '<option idCliCompartido= "idCliCompartido" value= "Andrea Guaman">Andrea Guaman</option>';
+
+            }
 
 
             $(".nuevoProducto").append(
@@ -259,19 +339,16 @@ $(".formularioVenta").on("click", ".btnAgregarProducto", function() {
 
                 '<option idCliCompartido= "idCliCompartido" value= "">- Cliente Compartido -</option>' +
 
-                '<option idCliCompartido= "idCliCompartido" value= "Adrián Rios">Adrián Ríos</option>' +
+                cuenca +
 
-                '<option idCliCompartido= "idCliCompartido" value= "Janneth Luna">Janneth Luna</option>' +
+                ambato +
 
-                '<option idCliCompartido= "idCliCompartido" value= "Marcelo Vásquez">Marcelo Vásquez</option>' +
+                quito6 +
 
-                '<option idCliCompartido= "idCliCompartido" value= "Juan Nieto">Juan Nieto</option>' +
+                quitoCumbaya +
 
-                '<option idCliCompartido= "idCliCompartido" value= "Karla Saldana">Karla Saldaña</option>' +
+                quitoSangolqui +
 
-                '<option idCliCompartido= "idCliCompartido" value= "Belen Morales">Belen Morales</option>' +
-
-                '<option idCliCompartido= "idCliCompartido" value= "Alice Minchalo">Alice Minchalo</option>' +
 
                 '</select>' +
 

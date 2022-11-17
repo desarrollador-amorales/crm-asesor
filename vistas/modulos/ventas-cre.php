@@ -13,16 +13,6 @@ if($_SESSION["perfil"] == "Especial"){
 
 }
 
-$xml = ControladorVentas::ctrDescargarXML();
-
-if($xml){
-
-  rename($_GET["xml"].".xml", "xml/".$_GET["xml"].".xml");
-
-  echo '<a class="btn btn-block btn-success abrirXML" archivo="xml/'.$_GET["xml"].'.xml" href="ventas">Se ha creado correctamente el archivo XML <span class="fa fa-times pull-right"></span></a>';
-
-}
-
 ?>
 <div class="content-wrapper">
 
@@ -55,7 +45,7 @@ if($xml){
             <span>
               <i class="fa fa-calendar"></i> 
 
-              <?php
+              <?php             
 
                 if(isset($_GET["fechaInicial"])){
 
@@ -74,6 +64,15 @@ if($xml){
 
          </button>
 
+         <?php
+
+            if($_SESSION["perfil"] == "Vendedor"){
+
+            echo '<button class="btn btn-success" data-toggle="modal" data-target="#modalReporteDiario"></i> Reporte Diario</button>';
+            }
+
+          ?>
+
       </div>
 
       <div class="box-body">
@@ -89,7 +88,7 @@ if($xml){
            <th>Cliente</th>
            <th>Almacen</th>
            <?php
-            if($_SESSION["perfil"] == "Administrador"){
+            if($_SESSION["perfil"] == "Administrador"|| $_SESSION["perfil"] == "Supervisor"){
               echo '<th>Asesor</th>';
             }
            ?>
@@ -119,7 +118,7 @@ if($xml){
 
           $valor2 = 0;
 
-          if($_SESSION["perfil"] == "Administrador"){
+          if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
             $item = null;
             $valor = null;
           }
@@ -142,7 +141,7 @@ if($xml){
 
                   <td>'.($key+1).'</td>
 
-                  <td class="td_cotizacion">'.$value["cotizacion"].'</td>';
+                  <td>'.$value["cotizacion"].'</td>';
 
                   $itemCliente = "cedula";
                   $valorCliente = $value["ced_cliente"];
@@ -175,7 +174,7 @@ if($xml){
 
                   echo '<td>'.$value["nombre_almacen"].'</td>';
 
-                  if($_SESSION["perfil"] == "Administrador"){
+                  if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
 
                     echo '<td>'.$value["nombre"].'</td>';
  
@@ -188,8 +187,6 @@ if($xml){
                   <td>
 
                     <div class="btn-group">
-
-
 
                       <!--<button class="btn btn-success btnImprimirTicket" codigoVenta="'.$value["cotizacion"].'">
 
@@ -255,8 +252,12 @@ if($xml){
                         $numCotizaciones = ControladorVentas::ctrCotizacionesCliente($_SESSION["usuario"],$respuestaCliente["cedula"] );
 
                         if ($condicion_recorrido == 'EXT'){
+                          
+                          $recorridoAlm= "'EXT'";
 
                           echo '<button class="btn btn-warning btnEditarRecorrido" idVenta="'.$id_actividad.'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idRecorrido="'.$idRecorrido.'"><i class="fa fa-pencil"></i></button>';
+
+                          echo '<span class="input-group-addon"><button class="btnLeerDatos" data-toggle="modal" data-target="#modalRelacionarCotizacion" idCliProforma="'.$value["id"].'" idAlmacen="'.$recorridoAlm.'"></i> Relacionar</button></span>';                   
 
                         }else{
 
@@ -269,7 +270,7 @@ if($xml){
                       }
 
 
-                      if($_SESSION["perfil"] == "Administrador" ){
+                      if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor" ){
                         
                         if ($condicion_recorrido == 'EXT'){
 
@@ -277,11 +278,19 @@ if($xml){
 
                         }else{
 
+                          if($_SESSION["perfil"] == "Supervisor"){
+                            
+                            echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>';    
+                            
+                          }else{
+
                           echo '<button class="btn btn-warning btnEditarVenta" id_session = "0" id_vendedor = "0" idVenta="'.$value["id_actividad"].'" actividadRealizada="'.$valor2.'" numeroCotizacion="'.$value["cotizacion"].'" idAlmacen="'.$value["id_almacen"].'"><i class="fa fa-pencil"></i></button>
 
                           <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id_actividad"].'"><i class="fa fa-times"></i></button>';
 
                         }
+
+                      }
 
                     }
 
@@ -396,6 +405,139 @@ if($xml){
         $crearCliente -> ctrRelacionarCotizacion();
 
         ?>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+  <!--=====================================
+  MODAL REPORTE DIARIO
+  ======================================-->
+
+<div id="modalReporteDiario" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Reporte Diario</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+            <!-- ENTRADA PARA EL NOMBRE -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <?php
+                if($_SESSION["perfil"] == "Vendedor"){
+                    $reporteDiario = ControladorVentas::ctrMostrarReporteDiarioAsesor($_SESSION["usuario"]);
+                  }
+                ?>
+
+                  <div class="inner">
+                    
+                    <h3>Actividades Pendientes: <strong><?php echo $reporteDiario["Act_Pendiente"]?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Negociaciones Abiertas: <strong><?php echo $reporteDiario["Act_Abiertas"]?></strong></h3> 
+                   
+                  
+                  </div>
+
+
+                  <div class="inner">
+                    
+                    <h3>Negociaciones Seguimiento: <strong><?php echo $reporteDiario["Act_Seguimiento"]?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Negociaciones Cerradas: <strong><?php echo $reporteDiario["Act_Vendida"]?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Negociaciones Perdidas: <strong><?php echo $reporteDiario["Act_Perdido"]?><strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Total Actividades Realizadas: <strong><?php echo $reporteDiario["Total_Actividades"]?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Ventas del dia  <strong>$<?php echo isset($reporteDiario["Venta_dia"])?$reporteDiario["Venta_dia"]:'0.00'?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Ventas Acumuladas <strong>$<?php echo isset($reporteDiario["Venta_Acumulada"])?$reporteDiario["Venta_Acumulada"]:'0.00' ?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Mi Meta <strong>$<?php echo isset($reporteDiario["meta"])?$reporteDiario["meta"]:'0.00' ?></strong></h3>
+                  
+                  </div>
+
+                  <div class="inner">
+                    
+                    <h3>Mi Cumplimiento <strong><?php echo isset($reporteDiario["Cumplimiento"])?$reporteDiario["Cumplimiento"]:'0.00%'?></strong></h3>
+                  
+                  </div>
+                  
+                </div>
+  
+            </div>
+
+        </div>
+        
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+        </div>
+      
+        </form>
 
     </div>
 

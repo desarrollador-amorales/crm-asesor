@@ -44,7 +44,7 @@ class ModeloVentas{
 	static public function mdlMostrarHistorialCotizacionRelacionada($tabla, $numeroCotizacion, $idAlmacen){
 
 
-			$stmt = Conexion::conectar()->prepare("SELECT cp.cotizacion_relacion as principal,cp.cotizacion secundaria, cp.relacionado , cp.motivo_relacion, cp.fecha_motivo_relacion FROM $tabla WHERE cp.relacionado = '1' and cp.motivo_relacion is not null and cp.cotizacion_relacion = $numeroCotizacion ");
+			$stmt = Conexion::conectar()->prepare("SELECT cp.cotizacion_relacion as principal,cp.cotizacion secundaria, cp.relacionado, cp.id_actividad , cp.motivo_relacion, cp.fecha_motivo_relacion FROM $tabla WHERE cp.relacionado = '1' and cp.motivo_relacion is not null and cp.cotizacion_relacion = $numeroCotizacion ");
 
 			$stmt -> execute();
 
@@ -61,7 +61,7 @@ class ModeloVentas{
 
 		//$stmt = Conexion::conectar()->prepare("SELECT cp.cotizacion, cp.id_almacen, cp.nombre_almacen,u.usuario,v.id_cliente, u.nombre, c.cedula, c.fecha_nacimiento as creacion_cliente , v.productos FROM $tabla WHERE productos != '[]' and cp.id_actividad = v.id and u.id = v.id_vendedor and c.id = v.id_cliente ");
 
-		$stmt = Conexion::conectar()->prepare("SELECT cp.cotizacion, cp.id_almacen, cp.nombre_almacen, u.usuario, v.id_cliente, u.nombre, cp.ced_cliente as cedula,(CASE WHEN (select c.fecha_nacimiento from clientes c where c.id= v.id_cliente) IS NULL THEN cp.fecha_cotizacion ELSE (select c.fecha_nacimiento from clientes c where c.id= v.id_cliente )END) AS creacion_cliente, v.productos FROM $tabla WHERE  v.productos != '[]' and cp.id_actividad = v.id and u.id = v.id_vendedor ");
+		$stmt = Conexion::conectar()->prepare("SELECT cp.cotizacion, cp.id_almacen, cp.nombre_almacen, u.usuario, v.id_cliente, u.nombre, cp.ced_cliente as cedula,(CASE WHEN (select c.fecha_nacimiento from clientes c where c.id= v.id_cliente) IS NULL THEN cp.fecha_cotizacion ELSE (select c.fecha_nacimiento from clientes c where c.id= v.id_cliente )END) AS creacion_cliente, v.productos FROM $tabla WHERE  v.productos != '[]' and cp.id_actividad = v.id and u.usuario = cp.id_asesor");
 
 		$stmt -> execute();
 
@@ -402,19 +402,56 @@ class ModeloVentas{
 
 				if ($valor2 == "1"){
 
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE  u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and u.ubicacion = '".$ubicacionAsignada."' and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' and v.productos not like '%$condicionRecorridoProductos1%' and v.productos not like '%$condicionRecorridoProductos2%' ");		
+					if ($ubicacionAsignada != null ){
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE  u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and u.ubicacion = '".$ubicacionAsignada."' and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' and v.productos not like '%$condicionRecorridoProductos1%' and v.productos not like '%$condicionRecorridoProductos2%' ");		
+
+					}else{
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE  u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and cp.id_actividad = v.id and v.productos not like '%$condicionProductos1%' and v.productos not like '%$condicionProductos2%' and v.productos not like '%$condicionRecorridoProductos1%' and v.productos not like '%$condicionRecorridoProductos2%' ");		
+
+					}			
 
 				}
 				else if($valor2 == "2"){
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE   u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and u.ubicacion = '".$ubicacionAsignada."' and cp.id_actividad = v.id and (v.productos like '%$condicionProductos1%' or v.productos like '%$condicionRecorridoProductos1%') ");		
+
+					if ($ubicacionAsignada != null){
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE   u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and u.ubicacion = '".$ubicacionAsignada."' and cp.id_actividad = v.id and (v.productos like '%$condicionProductos1%' or v.productos like '%$condicionRecorridoProductos1%') ");		
+
+					}else{
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE   u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and cp.id_actividad = v.id and (v.productos like '%$condicionProductos1%' or v.productos like '%$condicionRecorridoProductos1%') ");		
+
+					}
+					
 				}
 				
 				else if($valor2 == "3"){
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE   u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and u.ubicacion = '".$ubicacionAsignada."' and cp.id_actividad = v.id and (v.productos like '%$condicionProductos2%' or v.productos like '%$condicionRecorridoProductos2%') ");		
+
+					if ($ubicacionAsignada != null){
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE   u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and u.ubicacion = '".$ubicacionAsignada."' and cp.id_actividad = v.id and (v.productos like '%$condicionProductos2%' or v.productos like '%$condicionRecorridoProductos2%') ");		
+
+					}
+					else{
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE   u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = 1 and cp.id_actividad = v.id and (v.productos like '%$condicionProductos2%' or v.productos like '%$condicionRecorridoProductos2%') ");		
+
+					}
+
 				}
 				
 				else {
-					$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and u.ubicacion = '".$ubicacionAsignada."'");
+
+					if ($ubicacionAsignada != null ){
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 and u.ubicacion = '".$ubicacionAsignada."'");
+
+					}else{
+
+						$stmt = Conexion::conectar()->prepare("SELECT cp.*,u.nombre, u.id id_asesor_interno,(select u2.nombre from usuarios u2 where u2.usuario=cp.usuIde) UsuIde FROM $tabla WHERE u.usuario = cp.id_asesor and cp.relacionado = 0 and cp.actividad_realizada = $valor2 ");
+
+					}
 				}  
 			
 			$stmt -> execute();
@@ -711,6 +748,24 @@ class ModeloVentas{
 		$stmt -> execute();
 
 		return $stmt -> fetchAll(); 
+
+}
+
+	/*=============================================
+	MOSTRAR REPORTE DIARIO DE ASESOR
+	=============================================*/
+
+	static public function mdlMostrarReporteDiario($tabla, $idAsesor){
+		$desde= date("Y-m-01");
+		$hasta = date("Y-m-t");
+		$hoy = date('Y-m-d');
+
+
+		$stmt = Conexion::conectar()->prepare("SELECT x.Act_Pendiente, x.Act_Seguimiento, x.Act_Vendida, x.Act_Perdido, x.Act_Abiertas, sum(x.Act_Abiertas + x.Act_Perdido+ x.Act_Vendida+ x.Act_Seguimiento) Total_Actividades, x.Venta_Acumulada, x.Venta_dia, x.meta, CONCAT((ROUND((x.Venta_acumulada/x.meta),2)*100),' %') Cumplimiento FROM ( SELECT (SELECT count(hpr.cotizacion) as seguimiento FROM historial_proforma_reporte hpr, (select MAX(hpr2.fecha_seguimiento) fecSeg, MAX(hpr2.id)idHis, hpr2.cotizacion coti from historial_proforma_reporte hpr2, cliente_proforma cp WHERE hpr2.id_asesor = $idAsesor and fecha_seguimiento IS NOT NULL and cp.cotizacion = hpr2.cotizacion and cp.id_almacen = hpr2.id_almacen and cp.relacionado = 0 GROUP by hpr2.cotizacion) ultFecSeg where hpr.id= ultFecSeg.idHis and date_format(hpr.fecha_seguimiento, '%Y-%m-%d') BETWEEN '".$desde."' AND '".$hoy."' and hpr.estado_cliente = 'Seguimiento') Act_Pendiente, count(*) Act_Abiertas, (select count(*) from historial_proforma_reporte hpr where hpr.id_asesor = cp.id_asesor and date_format(hpr.fecha , '%Y-%m-%d') = date_format(cp.fecha_cotizacion, '%Y-%m-%d') and hpr.estado_cliente ='Seguimiento') Act_Seguimiento, (select count(*) from historial_proforma_reporte hpr where hpr.id_asesor = cp.id_asesor and date_format(hpr.fecha_seguimiento , '%Y-%m-%d') = date_format(cp.fecha_cotizacion, '%Y-%m-%d') and hpr.estado_cliente ='Vendido') Act_Vendida, (select count(*) from historial_proforma_reporte hpr where hpr.id_asesor = cp.id_asesor and date_format(hpr.fecha , '%Y-%m-%d') = date_format(cp.fecha_cotizacion, '%Y-%m-%d') and hpr.estado_cliente ='Perdido') Act_Perdido, (select sum(hpr2.valor_factura) from historial_proforma_reporte hpr2 WHERE hpr2.id_asesor= cp.id_asesor and date_format(hpr2.fecha_seguimiento , '%Y-%m-%d') BETWEEN '".$desde."' AND '".$hasta."' and hpr2.estado_cliente= 'Vendido') Venta_Acumulada, (select sum(hpr2.valor_factura) from historial_proforma_reporte hpr2 WHERE hpr2.id_asesor= cp.id_asesor and date_format(hpr2.fecha_seguimiento , '%Y-%m-%d') = date_format(cp.fecha_cotizacion, '%Y-%m-%d') and hpr2.estado_cliente= 'Vendido') Venta_dia, (select u.presupuesto from usuarios u where u.usuario= cp.id_asesor) meta from $tabla where date_format(cp.fecha_cotizacion , '%Y-%m-%d') = '".$hoy."' and cp.id_asesor = $idAsesor) as x");
+
+		$stmt -> execute();
+
+		return $stmt -> fetch(); 
 
 }
 

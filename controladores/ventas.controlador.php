@@ -1049,5 +1049,18 @@ class ControladorVentas{
 
 	}
 
+	/*=============================================
+	MOSTRAR REPORTE DIARIO ASESOR
+	=============================================*/
+
+	static public function ctrMostrarReporteDiarioAsesor($idAsesor){
+
+		$tabla = "cliente_proforma cp ";
+
+		$respuesta = ModeloVentas::mdlMostrarReporteDiario($tabla, $idAsesor);
+ 
+		return $respuesta;
+
+	}
 
 }

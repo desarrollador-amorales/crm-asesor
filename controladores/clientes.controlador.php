@@ -133,6 +133,33 @@ class ControladorClientes{
 
 		if(isset($_POST["cotizacionRelacion"])){
 
+			$condicion_recorrido =substr($_POST["cotizacionRelacion"],0,3);
+
+			if ($condicion_recorrido == 'EXT' or $condicion_recorrido == 'ext'){
+
+				echo'<script>
+
+					swal({
+						  type: "error",
+						  title: "¡No se puede relacionar un formulario de cliente externo!",
+						  showConfirmButton: true,
+						  confirmButtonText: "Cerrar"
+						  }).then(function(result){
+							if (result.value) {';
+
+								if($_POST["actividadRealizada"] == "1" ){
+									echo 'window.location = "ventas";';
+								}else if($_POST["actividadRealizada"] == "0" ){
+									echo 'window.location = "ventas-cre";';
+								}
+
+						echo '}
+						})
+
+			  	</script>';
+
+			}else{
+
 			$datos = array ("cotizacionRelacion"=>$_POST["cotizacionRelacion"],
 							"idCotizacion" => $_POST["idCotizacion"],
 							"motivoRelacion" => $_POST["motivoRelacion"],
@@ -193,6 +220,8 @@ class ControladorClientes{
 			}
 
 		}
+	
+	 }
 	}
 
 	

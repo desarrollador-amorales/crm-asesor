@@ -114,7 +114,7 @@ if($xml){
 
           $valor2 = 3;
 
-          if($_SESSION["perfil"] == "Administrador"){
+          if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
             $item = null;
             $valor = null;
           }
@@ -133,7 +133,7 @@ if($xml){
 
                   <td>'.($key+1).'</td>
 
-                  <td class="td_cotizacion">'.$value["cotizacion"].'</td>';
+                  <td>'.$value["cotizacion"].'</td>';
 
                   $itemCliente = "cedula";
                   $valorCliente = $value["ced_cliente"];
@@ -193,7 +193,7 @@ if($xml){
                       }
 
 
-                      if($_SESSION["perfil"] == "Administrador" ){
+                      if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Supervisor"){
 
                         if ($condicion_recorrido == 'EXT'){
 

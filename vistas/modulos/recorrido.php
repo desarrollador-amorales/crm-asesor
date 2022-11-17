@@ -275,7 +275,48 @@ MODAL AGREGAR CLIENTE
 
                                 <select name="nuevaCiudad" class="form-control input-lg" required>
                                     <option selected value="">--Ingresar Ciudad--</option>
-                                    <option value="Cuenca">Cuenca</option>
+                                    <?php  
+                                    if ($_SESSION["ubicacion"] == 'Quito-6 Diciembre' || $_SESSION["ubicacion"] == 'Quito-Sangolqui' || $_SESSION["ubicacion"] == 'Quito-Cumbaya' ){
+
+                                    echo 
+                                    '<option value="Quito">Quito</option>
+                                    <option value="Quito Sur">Quito Sur</option>
+                                    <option value="Quito Centro">Quito Centro</option>
+                                    <option value="Quito Norte">Quito Norte</option>
+                                    <option value="Alangasi">Alangasi</option>
+                                    <option value="Amaguaña">Amaguaña</option>
+                                    <option value="Calacalí">Calacalí</option>
+                                    <option value="Calderon">Calderon</option>
+                                    <option value="Conocoto">Conocoto</option>
+                                    <option value="Cumbayá">Cumbayá</option>
+                                    <option value="Checa">Checa</option>
+                                    <option value="El Quinche">El Quinche</option>
+                                    <option value="Gualea">Gualea</option>
+                                    <option value="Guagopolo">Guagopolo</option>
+                                    <option value="Guayllabamba">Guayllabamba</option>
+                                    <option value="La Merced">La Merced</option>
+                                    <option value="Llano Chico">Llano Chico</option>
+                                    <option value="Llano Grande">Llano Grande</option>
+                                    <option value="Tumbaco">Tumbaco</option>
+                                    <option value="Pifo">Pifo</option>
+                                    <option value="Puembo">Puembo</option>
+                                    <option value="Pintag">Pintag</option>
+                                    <option value="Tabacundo">Tabacundo</option>
+                                    <option value="Los Bancos">Los Bancos</option>
+                                    <option value="Pedro Vicente Maldonado">Pedro Vicente Maldonado</option>
+                                    <option value="Puerto Quito">Puerto Quito</option>
+                                    <option value="Ibarra">Ibarra</option>
+                                    <option value="Otavalo">Otavalo</option>
+                                    <option value="San Pablo">San Pablo</option>
+                                    <option value="Sto Domingo">Sto Domingo</option>
+                                    <option value="Tonsupa">Tonsupa</option>
+                                    <option value="Esmeraldas">Esmeraldas</option>
+                                    <option value="Atacames">Atacames</option>
+                                    <option value="Otros">Otros</option>';
+
+                                    }else{
+                                    echo 
+                                    '<option value="Cuenca">Cuenca</option>
                                     <option value="Azogues">Azogues</option>
                                     <option value="Gualaceo">Gualaceo</option>
                                     <option value="Paute">Paute</option>
@@ -283,7 +324,11 @@ MODAL AGREGAR CLIENTE
                                     <option value="Loja">Loja</option>
                                     <option value="Canar">Cañar</option>
                                     <option value="Machala">Machala</option>
-                                    <option value="Otros">Otros</option>
+                                    <option value="Otros">Otros</option>';
+                                    }
+                                    
+                                    ?>
+                                    
                                 </select>
 
                             </div>
@@ -615,15 +660,59 @@ MODAL EDITAR CLIENTE
 
                         <select name="editarCiudad" id="editarCiudad" class="form-control input-lg" required>
                                 <option selected value="">--Ingresar Ciudad--</option>
-                                <option value="Cuenca">Cuenca</option>
-                                <option value="Azogues">Azogues</option>
-                                <option value="Gualaceo">Gualaceo</option>
-                                <option value="Paute">Paute</option>
-                                <option value="Chordeleg">Chordeleg</option>
-                                <option value="Loja">Loja</option>
-                                <option value="Canar">Cañar</option>
-                                <option value="Machala">Machala</option>
-                                <option value="Otros">Otros</option>
+                                <?php  
+                                    if ($_SESSION["ubicacion"] == 'Quito-6 Diciembre' || $_SESSION["ubicacion"] == 'Quito-Sangolqui' || $_SESSION["ubicacion"] == 'Quito-Cumbaya' ){
+
+                                    echo 
+                                    '<option value="Quito">Quito</option>
+                                    <option value="Quito Sur">Quito Sur</option>
+                                    <option value="Quito Centro">Quito Centro</option>
+                                    <option value="Quito Norte">Quito Norte</option>
+                                    <option value="Alangasi">Alangasi</option>
+                                    <option value="Amaguaña">Amaguaña</option>
+                                    <option value="Calacalí">Calacalí</option>
+                                    <option value="Calderon">Calderon</option>
+                                    <option value="Conocoto">Conocoto</option>
+                                    <option value="Cumbayá">Cumbayá</option>
+                                    <option value="Checa">Checa</option>
+                                    <option value="El Quinche">El Quinche</option>
+                                    <option value="Gualea">Gualea</option>
+                                    <option value="Guagopolo">Guagopolo</option>
+                                    <option value="Guayllabamba">Guayllabamba</option>
+                                    <option value="La Merced">La Merced</option>
+                                    <option value="Llano Chico">Llano Chico</option>
+                                    <option value="Llano Grande">Llano Grande</option>
+                                    <option value="Tumbaco">Tumbaco</option>
+                                    <option value="Pifo">Pifo</option>
+                                    <option value="Puembo">Puembo</option>
+                                    <option value="Pintag">Pintag</option>
+                                    <option value="Tabacundo">Tabacundo</option>
+                                    <option value="Los Bancos">Los Bancos</option>
+                                    <option value="Pedro Vicente Maldonado">Pedro Vicente Maldonado</option>
+                                    <option value="Puerto Quito">Puerto Quito</option>
+                                    <option value="Ibarra">Ibarra</option>
+                                    <option value="Otavalo">Otavalo</option>
+                                    <option value="San Pablo">San Pablo</option>
+                                    <option value="Sto Domingo">Sto Domingo</option>
+                                    <option value="Tonsupa">Tonsupa</option>
+                                    <option value="Esmeraldas">Esmeraldas</option>
+                                    <option value="Atacames">Atacames</option>
+                                    <option value="Otros">Otros</option>';
+
+                                    }else{
+                                    echo 
+                                    '<option value="Cuenca">Cuenca</option>
+                                    <option value="Azogues">Azogues</option>
+                                    <option value="Gualaceo">Gualaceo</option>
+                                    <option value="Paute">Paute</option>
+                                    <option value="Chordeleg">Chordeleg</option>
+                                    <option value="Loja">Loja</option>
+                                    <option value="Canar">Cañar</option>
+                                    <option value="Machala">Machala</option>
+                                    <option value="Otros">Otros</option>';
+                                    }
+                                    
+                                    ?>
                         </select>
 
                     </div>

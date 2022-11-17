@@ -447,8 +447,8 @@ class ModeloClientes{
 
 				$id_cotizacion = 'EXT'.$pdo->lastInsertId();
 
-				$stmt2 = Conexion::conectar()->prepare("INSERT INTO cliente_proforma(id_asesor, ced_cliente, nombre_almacen, cotizacion, fecha_cotizacion, relacionado, UsuIde) 
-				VALUES (:id_asesor,:ced_cliente, 'RECORRIDO', :cotizacion, NOW(), '0', :usu_ide)");
+				$stmt2 = Conexion::conectar()->prepare("INSERT INTO cliente_proforma(id_asesor, ced_cliente, id_almacen, nombre_almacen, cotizacion, fecha_cotizacion, relacionado, UsuIde) 
+				VALUES (:id_asesor,:ced_cliente, 'EXT', 'RECORRIDO', :cotizacion, NOW(), '0', :usu_ide)");
 
 				$propietario='';
 				if ($datos["nom1"]!= null){
